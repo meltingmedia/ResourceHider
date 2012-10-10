@@ -8,24 +8,12 @@
  */
 if ($modx->context->key != 'mgr') return;
 $params = $modx->event->params;
-if ($params['mode'] != 'upd') return;
+if ($params['mode'] !== modSystemEvent::MODE_UPD) return;
 
 $rh = $modx->getService('resourcehider', 'ResourceHider', $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/') . 'model/resourcehider/');
 if (!($rh instanceof ResourceHider)) return;
 
-//$modx->log(modX::LOG_LEVEL_ERROR, print_r($params['mode'], true));
-//foreach ($params as $key => $value) {
-//    $modx->log(modX::LOG_LEVEL_ERROR, print_r($key, true));
-////    if ($key == 'resource') {
-////        $modx->log(modX::LOG_LEVEL_ERROR, print_r($value, true));
-////    }
-//}
-
 $objectArray = $params['resource']->toArray();
-//$modx->log(modX::LOG_LEVEL_ERROR, print_r($objectArray, true));
-
-
-
 $modx->regClientStartupScript($rh->config['js_url'] . 'mgr/resourcehider.js');
 $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {
@@ -42,6 +30,6 @@ $modx->regClientStartupScript('<script type="text/javascript">
             modAB.doLayout();
         }
     });
-</script>', 1);
+</script>');
 
 return;

@@ -1,10 +1,11 @@
-## ResourceHider
+## Resource Hider
 
-ResourceHider is MODX Revolution component which allows you to hide/show some resources from the back-end tree.
+Resource Hider is MODX Revolution component which allows you to hide/show some resources from the back-end tree.
 You can either hide all resources from a given parent, or hand-pick wich resource to hide.
 This makes use of hide_children_in_tree & show_in_tree columns.
 
-NOTE : Be sure you know what you do, you can easily lose access to your resources from the back-end!
+NOTE : Be sure you know what you do, you can easily lose access to your resources from the back-end! (but the data is
+NOT lost!)
 
 ## Installation
 

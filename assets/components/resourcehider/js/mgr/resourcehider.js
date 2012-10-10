@@ -3,7 +3,6 @@ Ext.ns('ResourceHider');
  * @var ResourceHider
  * @extends Ext.SplitButton
  * @param config
- * @constructor
  * @xtype resourcehider
  */
 ResourceHider.Menu = function(config) {
@@ -11,7 +10,7 @@ ResourceHider.Menu = function(config) {
     config.record = config.record || {};
 
     Ext.applyIf(config, {
-        text: _('resourcehider')
+        text: _('resourcehider.button')
         ,cls: 'x-btn-text bmenu'
         ,handler: function() {
             if (this.menu && !this.menu.isVisible() && !this.ignoreNextClick) {
@@ -43,27 +42,27 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         var record = this.record;
         var menu = [];
 
+        // Resource specific
         if (record.show_in_tree) {
-            action = 'hide_in_tree';
-            menu.push(this._setAction(action));
+            menu.push(this._setAction('hide_in_tree'));
         } else {
-            action = 'show_in_tree';
-            menu.push(this._setAction(action));
+            menu.push(this._setAction('show_in_tree'));
         }
-
+        // Resource children
         if (record.hide_children_in_tree) {
-            action = 'show_children_in_tree';
-            menu.push(this._setAction(action));
+            menu.push(this._setAction('show_children_in_tree'));
         } else {
-            action = 'hide_children_in_tree';
-            menu.push(this._setAction(action));
+            menu.push(this._setAction('hide_children_in_tree'));
         }
 
         // The whole menu
-        this.setMenu(menu);
+        this._setMenu(menu);
     }
 
-    ,setMenu: function(menu) {
+    /**
+     * Renders the whole split button
+     */
+    ,_setMenu: function(menu) {
         var hasMenu = (this.menu != null);
         this.menu = Ext.menu.MenuMgr.get(menu);
         if (this.rendered && !hasMenu) {
@@ -73,13 +72,60 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         }
     }
 
+    /**
+     * Generates the appropriate menu entry
+     */
     ,_setAction: function(action) {
         return {
             text: _('resourcehider.' + action)
             ,scope: this
             ,handler: function() {
-                console.log(action);
+                this._performAction(action);
             }
+        }
+    }
+
+    /**
+     * Updates the resource with the appropriate data
+     */
+    ,_performAction: function(action) {
+        MODx.Ajax.request({
+            url: this.url
+            ,params: {
+                action: 'mgr/resource/setAction'
+                ,id: this.record.id
+                ,perform: action
+            }
+            ,listeners: {
+                success: {
+                    fn: function(r) {
+                        this.record = r.object;
+
+                        this.setup();
+                        this._refreshTree();
+
+                        // @todo: make this de-activable
+                        MODx.msg.status({
+                            title: _('resourcehider.success_msg_title')
+                            ,message: _('resourcehider.success_msg')
+                            ,delay: 1
+                        });
+                    }
+                    ,scope: this
+                }
+            }
+        });
+    }
+
+    /**
+     * Refresh the resource tree to reflect the changes
+     */
+    ,_refreshTree: function() {
+        var tree = Ext.getCmp('modx-resource-tree');
+        // @todo make sure the tree is visible
+        if (tree) {
+            // @todo find a way to just reload the appropriate node
+            tree.refresh();
         }
     }
 });
