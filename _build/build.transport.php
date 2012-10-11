@@ -12,8 +12,8 @@ set_time_limit(0);
 /* define package names */
 define('PKG_NAME', 'ResourceHider');
 define('PKG_NAME_LOWER', 'resourcehider');
-define('PKG_VERSION', '0.0.' . date('m'));
-define('PKG_RELEASE', 'dev' . date('d'));
+define('PKG_VERSION', '0.1.0');
+define('PKG_RELEASE', 'dev1');
 
 /* define build paths */
 $root = dirname(dirname(__FILE__)) . '/';
@@ -103,6 +103,26 @@ $vehicle->resolve('file', array(
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
 $builder->putVehicle($vehicle);
+
+// load menu
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
+$menu = include $sources['data'] . 'transport.menu.php';
+if (empty($menu)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
+$vehicle = $builder->createVehicle($menu, array (
+    xPDOTransport::PRESERVE_KEYS => true,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'text',
+    xPDOTransport::RELATED_OBJECTS => true,
+    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
+        'Action' => array (
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => array ('namespace', 'controller'),
+        ),
+    ),
+));
+$builder->putVehicle($vehicle);
+unset($vehicle, $menu);
 
 // now pack in the license file, readme and setup options
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding package attributes and setup options...');

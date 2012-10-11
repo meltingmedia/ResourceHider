@@ -2,6 +2,10 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
+2012/10/12 : ResourceHider 0.1.0-dev1
+==============================================================================
+- Added a CMP to restore resources which have show_in_tree = false
+
 2012/10/11 : ResourceHider 0.0.10-dev11
 ==============================================================================
 - Slight cleanup in the ExtJS asset
