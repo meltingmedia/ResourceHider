@@ -1,9 +1,8 @@
 Ext.ns('ResourceHider');
 /**
- * @var ResourceHider
+ * @class ResourceHider.Menu
  * @extends Ext.SplitButton
- * @param config
- * @xtype resourcehider
+ * @param {object} config
  */
 ResourceHider.Menu = function(config) {
     config = config || {};
@@ -12,6 +11,7 @@ ResourceHider.Menu = function(config) {
     Ext.applyIf(config, {
         text: _('resourcehider.button')
         ,cls: 'x-btn-text bmenu'
+        ,url: ResourceHider.config.connector_url
         ,handler: function() {
             if (this.menu && !this.menu.isVisible() && !this.ignoreNextClick) {
                 this.showMenu();
@@ -19,26 +19,16 @@ ResourceHider.Menu = function(config) {
                 this.hideMenu();
             }
         }
-        ,url: ResourceHider.config.connector_url
-        ,listeners: {
-            setup: {
-                fn: this.setup
-                ,scope: this
-            }
-        }
     });
     ResourceHider.Menu.superclass.constructor.call(this, config);
-    this.addEvents({setup: true});
-    this.fireEvent('setup', config);
+    this.buildMenu();
 };
 
 Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
-    setup: function(cmp) {
-        this.buildMenu();
-    }
-
-    // Build the split button menu
-    ,buildMenu: function() {
+    /**
+     * Well, this the the method which builds the split button :)
+     */
+    buildMenu: function() {
         var record = this.record;
         var menu = [];
 
@@ -48,7 +38,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         } else {
             menu.push(this._setAction('show_in_tree'));
         }
-        // Resource children
+        // Resource's children
         if (record.hide_children_in_tree) {
             menu.push(this._setAction('show_children_in_tree'));
         } else {
@@ -67,8 +57,8 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         this.menu = Ext.menu.MenuMgr.get(menu);
         if (this.rendered && !hasMenu) {
             this.el.child(this.menuClassTarget).addClass('x-btn-with-menu');
-            this.menu.on("show", this.onMenuShow, this);
-            this.menu.on("hide", this.onMenuHide, this);
+            this.menu.on('show', this.onMenuShow, this);
+            this.menu.on('hide', this.onMenuHide, this);
         }
     }
 
@@ -101,7 +91,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
                     fn: function(r) {
                         this.record = r.object;
 
-                        this.setup();
+                        this.buildMenu();
                         this._refreshTree();
 
                         // @todo: make this de-activable
@@ -129,4 +119,3 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         }
     }
 });
-Ext.reg('babel-translations', ResourceHider.Menu);

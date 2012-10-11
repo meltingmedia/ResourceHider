@@ -50,12 +50,6 @@ $category = $modx->newObject('modCategory');
 $category->set('id', 1);
 $category->set('category', PKG_NAME);
 
-// add snippets
-//$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in snippets...');
-//$snippets = include $sources['data'] . 'transport.snippets.php';
-//if (empty($snippets)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in snippets.');
-//$category->addMany($snippets);
-
 // add plugins
 $plugins = include $sources['data'].'transport.plugins.php';
 if (!is_array($plugins)) {
@@ -90,7 +84,7 @@ $attr = array(
     xPDOTransport::UPDATE_OBJECT => true,
     xPDOTransport::RELATED_OBJECTS => true,
     xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
-        'Plugins' => array(
+        'Plugins' => array (
             xPDOTransport::PRESERVE_KEYS => false,
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',

@@ -15,7 +15,7 @@ $ResourceHider->set('id', 1);
 $ResourceHider->set('name', 'ResourceHider');
 $ResourceHider->set('description', 'Helps you hide/show resources in the resource tree.');
 $ResourceHider->set('plugincode', getSnippetContent($sources['elements'] . 'plugins/resourcehider.plugin.php'));
-$ResourceHider->set('category', 0);
+//$ResourceHider->set('category', 0);
 
 $events = include $sources['data'] . 'events/events.resourcehider.php';
 if (is_array($events) && !empty($events)) {

@@ -17,11 +17,10 @@ class ResourceHiderSetAction extends modObjectGetProcessor {
             return parent::process();
         }
 
-        $msg = $this->error;
-        if (!$msg) {
-            $msg = $this->modx->lexicon('resourcehider.error_msg_default');
+        if (!$this->error) {
+            $this->error = $this->modx->lexicon('resourcehider.error_msg_default');
         }
-        return $this->failure($msg);
+        return $this->failure($this->error);
     }
 
     /**

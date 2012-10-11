@@ -2,8 +2,9 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
-2012/xx/xx : ResourceHider 0.0.xx-devxx
+2012/10/11 : ResourceHider 0.0.10-dev11
 ==============================================================================
+- Slight cleanup in the ExtJS asset
 - ResourceHider is no more active on Custom resource Classes
 
 2012/10/10 : ResourceHider 0.0.10-dev10
