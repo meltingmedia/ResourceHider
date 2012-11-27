@@ -78,6 +78,12 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
                 this._performAction(this.menu.record.id);
             }
         });
+        m.push({
+            text: _('resource_edit')
+            ,handler: function() {
+                this.edit(this.menu.record.id);
+            }
+        });
 
         return m;
     }
@@ -114,6 +120,14 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
         if (tree) {
             tree.refresh();
         }
+    }
+
+    /**
+     * Edit the resource
+     */
+    ,edit: function(id) {
+        var action = MODx.action ? MODx.action['resource/update'] : 'resource/update';
+        location.href = '?a=' + action + '&id=' + id;
     }
 });
 Ext.reg('resourcehider-grid', ResourceHider.Grid);

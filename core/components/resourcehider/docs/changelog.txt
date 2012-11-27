@@ -2,6 +2,10 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
+2012/xx/xx : ResourceHider 0.1.1-dev
+==============================================================================
+- Added action to edit a resource from the CMP
+
 2012/10/12 : ResourceHider 0.1.0-dev1
 ==============================================================================
 - Added a CMP to restore resources which have show_in_tree = false
