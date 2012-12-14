@@ -4,8 +4,7 @@ Resource Hider is MODX Revolution component which allows you to hide/show some r
 You can either hide all resources from a given parent, or hand-pick which resource to hide.
 This makes use of hide_children_in_tree & show_in_tree columns.
 
-NOTE : Be sure you know what you do, you can easily lose access to your resources from the back-end! (but the data is
-NOT lost!)
+NOTE : You can easily restore your resources with the Custom Manager Page
 
 ## Installation
 
