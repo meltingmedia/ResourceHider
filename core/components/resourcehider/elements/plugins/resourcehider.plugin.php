@@ -12,11 +12,12 @@ $params = $modx->event->params;
 if ($params['mode'] !== modSystemEvent::MODE_UPD) return;
 // take care of CRC
 $type = $params['resource']->get('class_key');
-$allowed = array('modDocument', 'modResource');
-if (!in_array($type, $allowed)) return;
 
 $rh = $modx->getService('resourcehider', 'ResourceHider', $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/') . 'model/resourcehider/');
 if (!($rh instanceof ResourceHider)) return;
+
+$allowed = $rh->config['allowed_classes'];
+if (!in_array($type, $allowed)) return;
 
 $objectArray = $params['resource']->toArray();
 $modx->regClientStartupScript($rh->config['js_url'] . 'mgr/resourcehider.js');

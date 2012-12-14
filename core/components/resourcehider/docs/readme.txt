@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-Extra: ResourceHider
+Extra   : ResourceHider
 --------------------------------------------------------------------------------
 Since   : October 10th, 2012
 Author  : Romain Tripault // Melting Media <romain@melting-media.com>

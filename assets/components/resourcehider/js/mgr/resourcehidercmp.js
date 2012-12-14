@@ -48,8 +48,9 @@ ResourceHider.Grid = function(config) {
         url: ResourceHider.config.connector_url
         ,baseParams: {
             action: 'mgr/resource/getList'
+            ,type: 'all'
         }
-        ,fields: ['id', 'pagetitle']
+        ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree']
         ,paging: true
         ,remoteSort: true
         ,enableHdMenu: false
@@ -57,7 +58,15 @@ ResourceHider.Grid = function(config) {
         ,header: false
         ,anchor: '100%'
         ,emptyText: _('resourcehider.no_result')
+        ,grouping: true
+        ,groupBy: 'context_key'
+        ,singleText: _('resource')
+        ,pluralText: _('resources')
         ,columns: [{
+            header: _('context')
+            ,dataIndex: 'context_key'
+            ,hidden: true
+        },{
             header: _('id')
             ,dataIndex: 'id'
             ,width: 150
@@ -65,23 +74,64 @@ ResourceHider.Grid = function(config) {
         },{
             header: _('pagetitle')
             ,dataIndex: 'pagetitle'
+        },{
+            header: _('resourcehider.hidden_children')
+            ,dataIndex: 'hide_children_in_tree'
+            ,width: 150
+            ,fixed: true
+            ,renderer: this.renderBoolean
         }]
+        ,tbar: ['->', _('context'), '-', {
+            xtype: 'modx-combo-context'
+            ,url: ResourceHider.config.connector_url
+            ,value: _('resourcehider.all')
+            ,baseParams: {
+                action: 'mgr/context/getList'
+                ,exclude: 'mgr'
+                ,sortBy: 'rank'
+            }
+            ,listeners: {
+                select: function(combo, record, idx) {
+                    this.setBaseParam(combo, 'context_key')
+                }
+                ,scope: this
+            }
+        }, '-',{
+            xtype: 'resourcehider-hiddentypes'
+            ,value: 'all'
+            ,listeners: {
+                select: function(combo, record, idx) {
+                    this.setBaseParam(combo, 'type')
+                }
+                ,scope: this
+            }
+        },'-']
     });
     ResourceHider.Grid.superclass.constructor.call(this, config)
 };
 Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     getMenu: function() {
         var m = [];
-        m.push({
-            text: _('resourcehider.show_in_tree')
-            ,handler: function() {
-                this._performAction(this.menu.record.id);
-            }
-        });
+        if (this.menu.record.hide_children_in_tree) {
+            m.push({
+                text: 'Show children'
+                ,handler: function() {
+                    this._performAction(this.menu.record.id, 'show_children_in_tree');
+                }
+            });
+        }
+        if (!this.menu.record.show_in_tree) {
+            m.push({
+                text: _('resourcehider.show_in_tree')
+                ,handler: function() {
+                    this._performAction(this.menu.record.id, 'show_in_tree');
+                }
+            });
+        }
         m.push({
             text: _('resource_edit')
             ,handler: function() {
-                this.edit(this.menu.record.id);
+                this.edit(this.menu.record);
             }
         });
 
@@ -89,15 +139,41 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     }
 
     /**
+     * Renders the boolean value as readable text
+     * Adds text-align: right to the column
+     */
+    ,renderBoolean: function(value, metaData, record, rowIndex, colIndex, store) {
+        if (value == 0) {
+            value = _('no')
+        } else if (value == 1) {
+            value = _('yes')
+        }
+        metaData.attr = 'style="text-align: right"';
+
+        return value;
+    }
+
+    /**
+     * Sets the given baseParam in the grid's store & reloads the store
+     */
+    ,setBaseParam: function(combo, param) {
+        var store = this.getStore();
+        store.setBaseParam(param, combo.getValue());
+        store.removeAll();
+        this.getBottomToolbar().changePage(1);
+        this.refresh();
+    }
+
+    /**
      * Restores the show_in_tree status
      */
-    ,_performAction: function(id) {
+    ,_performAction: function(id, action) {
         MODx.Ajax.request({
             url: this.url
             ,params: {
                 action: 'mgr/resource/setAction'
                 ,id: id
-                ,perform: 'show_in_tree'
+                ,perform: action
             }
             ,listeners: {
                 success: {
@@ -125,9 +201,41 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     /**
      * Edit the resource
      */
-    ,edit: function(id) {
+    ,edit: function(record) {
         var action = MODx.action ? MODx.action['resource/update'] : 'resource/update';
-        location.href = '?a=' + action + '&id=' + id;
+        var classKey = '';
+        if (record.class_key != 'modDocument' && record.class_key != 'modResource') {
+            classKey = '&class_key=' + record.class_key;
+        }
+        location.href = '?a=' + action + '&id=' + record.id + classKey;
     }
 });
 Ext.reg('resourcehider-grid', ResourceHider.Grid);
+
+
+ResourceHider.hiddenTypes = function(config) {
+    config = config || {};
+
+    Ext.applyIf(config, {
+        store: new Ext.data.SimpleStore({
+            fields: ['d', 'v']
+            ,data: [
+                [_('resourcehider.hidden_type_all'), 'all']
+                ,[_('resourcehider.hidden_type_children'), 'children']
+                ,[_('resourcehider.hidden_type_hidden'), 'hidden']
+            ]
+        })
+        ,displayField: 'd'
+        ,valueField: 'v'
+        ,mode: 'local'
+        ,name: 'type'
+        ,hiddenName: 'type'
+        ,triggerAction: 'all'
+        ,editable: false
+        ,selectOnFocus: false
+        ,listWidth: 0
+    });
+    ResourceHider.hiddenTypes.superclass.constructor.call(this, config);
+};
+Ext.extend(ResourceHider.hiddenTypes, Ext.form.ComboBox);
+Ext.reg('resourcehider-hiddentypes', ResourceHider.hiddenTypes);

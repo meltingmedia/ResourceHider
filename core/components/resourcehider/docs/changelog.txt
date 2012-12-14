@@ -2,8 +2,12 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
-2012/xx/xx : ResourceHider 0.1.1-dev
+2012/12/14 : ResourceHider 0.1.1-dev
 ==============================================================================
+- Ability to filter per type of 'hide' (hidden children/hidden in tree)
+- The CMP now lists per context, as well as resources with hidden children
+- Added a system setting which allows to define which resource classes are
+  "allowed"
 - Added action to edit a resource from the CMP
 
 2012/10/12 : ResourceHider 0.1.0-dev1

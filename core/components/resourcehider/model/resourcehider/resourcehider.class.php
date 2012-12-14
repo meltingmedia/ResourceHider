@@ -19,6 +19,8 @@ class ResourceHider {
 
         $basePath = $this->modx->getOption('resourcehider.core_path', $config, $this->modx->getOption('core_path') . 'components/resourcehider/');
         $assetsUrl = $this->modx->getOption('resourcehider.assets_url' , $config, $this->modx->getOption('assets_url') . 'components/resourcehider/');
+        $classes = $this->modx->getOption('resourcehider.allowed_classes', $config, 'modDocument, modResource, modSymLink, modWebLink, modStaticResource');
+        $allowedClasses = array_map('trim', explode(',', $classes));
 
         $this->config = array_merge(array(
             'base_path' => $basePath,
@@ -29,6 +31,7 @@ class ResourceHider {
             'css_url' => $assetsUrl . 'css/',
             'assets_url' => $assetsUrl,
             'connector_url' => $assetsUrl . 'connector.php',
+            'allowed_classes' => $allowedClasses,
             'debug' => false,
             'debug_user' => '',
         ), $config);
