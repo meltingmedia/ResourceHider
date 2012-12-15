@@ -2,7 +2,7 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
-2012/12/xx : ResourceHider 0.1.2-dev
+2012/12/15 : ResourceHider 0.1.2-dev
 ==============================================================================
 - Ability to activate the split button per context, default (empty) to all
 - Fixed issue where resource in the grid were always considered as hidden in
