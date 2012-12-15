@@ -122,7 +122,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
         }
         if (this.menu.record.hide_children_in_tree) {
             m.push({
-                text: 'Show children'
+                text: _('resourcehider.show_children_in_tree')
                 ,handler: function() {
                     this._performAction(this.menu.record.id, 'show_children_in_tree');
                 }
