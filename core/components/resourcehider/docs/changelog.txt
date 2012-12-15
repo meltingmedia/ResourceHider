@@ -2,6 +2,11 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
+2012/12/xx : ResourceHider 0.1.2-dev
+==============================================================================
+- Fixed issue where resource in the grid were always considered as hidden in
+  tree
+
 2012/12/14 : ResourceHider 0.1.1-dev
 ==============================================================================
 - Ability to filter per type of 'hide' (hidden children/hidden in tree)

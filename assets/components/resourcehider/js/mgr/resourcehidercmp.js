@@ -50,7 +50,7 @@ ResourceHider.Grid = function(config) {
             action: 'mgr/resource/getList'
             ,type: 'all'
         }
-        ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree']
+        ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree', 'show_in_tree']
         ,paging: true
         ,remoteSort: true
         ,enableHdMenu: false
@@ -112,19 +112,19 @@ ResourceHider.Grid = function(config) {
 Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     getMenu: function() {
         var m = [];
-        if (this.menu.record.hide_children_in_tree) {
-            m.push({
-                text: 'Show children'
-                ,handler: function() {
-                    this._performAction(this.menu.record.id, 'show_children_in_tree');
-                }
-            });
-        }
         if (!this.menu.record.show_in_tree) {
             m.push({
                 text: _('resourcehider.show_in_tree')
                 ,handler: function() {
                     this._performAction(this.menu.record.id, 'show_in_tree');
+                }
+            });
+        }
+        if (this.menu.record.hide_children_in_tree) {
+            m.push({
+                text: 'Show children'
+                ,handler: function() {
+                    this._performAction(this.menu.record.id, 'show_children_in_tree');
                 }
             });
         }
