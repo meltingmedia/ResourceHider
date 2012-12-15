@@ -10,16 +10,20 @@ if ($modx->context->key != 'mgr') return;
 $params = $modx->event->params;
 // only when updating a resource
 if ($params['mode'] !== modSystemEvent::MODE_UPD) return;
-// take care of CRC
-$type = $params['resource']->get('class_key');
+/** @var modResource $resource */
+$resource =& $params['resource'];
 
 $rh = $modx->getService('resourcehider', 'ResourceHider', $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/') . 'model/resourcehider/');
 if (!($rh instanceof ResourceHider)) return;
 
-$allowed = $rh->config['allowed_classes'];
-if (!in_array($type, $allowed)) return;
+if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) return;
 
-$objectArray = $params['resource']->toArray();
+$allowedContexts = $rh->config['allowed_contexts'];
+if (!empty($allowedContexts)) {
+    if (!in_array($resource->get('context_key'), $allowedContexts)) return;
+}
+
+$objectArray = $resource->toArray();
 $modx->regClientStartupScript($rh->config['js_url'] . 'mgr/resourcehider.js');
 $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {
