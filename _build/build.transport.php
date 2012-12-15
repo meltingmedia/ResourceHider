@@ -12,7 +12,7 @@ set_time_limit(0);
 /* define package names */
 define('PKG_NAME', 'ResourceHider');
 define('PKG_NAME_LOWER', 'resourcehider');
-define('PKG_VERSION', '0.1.1');
+define('PKG_VERSION', '0.1.2');
 define('PKG_RELEASE', 'dev');
 
 /* define build paths */

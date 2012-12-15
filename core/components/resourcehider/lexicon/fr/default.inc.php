@@ -27,5 +27,9 @@ $_lang['resourcehider.success_msg_title'] = 'Succès';
 
 $_lang['setting_resourcehider.assets_url'] = 'URL des assets';
 $_lang['setting_resourcehider.assets_url_desc'] = 'URL vers les assets de Resource Hider';
+$_lang['setting_resourcehider.allowed_classes'] = 'Classes autorisées';
+$_lang['setting_resourcehider.allowed_classes_desc'] = 'Liste, séparée par des virgules, de classes de ressources dont vous pourrez changer leur « visibilité ». Par défaut : modResource, modDocument, modSymLink, modWebLink & modStaticResource.';
+$_lang['setting_resourcehider.allowed_contexts'] = 'Contextes autorisés';
+$_lang['setting_resourcehider.allowed_contexts_desc'] = 'Liste, séparée par des virgules, de clés de contextes dans lesquel vous souhaitez pouvoir la visibilité des ressources. Tous les contextes par défaut.';
 $_lang['setting_resourcehider.core_path'] = 'Chemin du core';
 $_lang['setting_resourcehider.core_path_desc'] = 'Le chemin aboslu vers le core du composant Resource Hider';
