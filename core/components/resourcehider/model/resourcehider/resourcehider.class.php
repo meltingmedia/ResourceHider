@@ -60,7 +60,7 @@ class ResourceHider {
             }
         }
 
-        $this->modx->addPackage('resourcehider', $this->config['model_path']);
+        //$this->modx->addPackage('resourcehider', $this->config['model_path']);
     }
 
     /**
