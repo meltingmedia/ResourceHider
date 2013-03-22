@@ -19,6 +19,7 @@ ResourceHider.CMP = function(config) {
             ,cls: 'modx-page-header'
         },{
             xtype: 'panel'
+            ,layout: 'anchor'
             ,items: [{
                 html: _('resourcehider.cmp_intro')
                 ,border: false
