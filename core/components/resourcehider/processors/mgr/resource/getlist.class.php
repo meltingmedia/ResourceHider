@@ -27,10 +27,11 @@ class ResourceHiderGetList extends modObjectGetListProcessor
             'class_key:IN' => $this->allowed,
         ));
 
-        if ($this->modx->resource instanceof modResource) {
-            // Assume we are in a CRC
+        $parent = $this->getProperty('resource');
+        if (isset($parent) && !empty($parent)) {
+            // Assume we are in a CRC (or TV)
             $c->where(array(
-                'parent' => $this->modx->resource->id,
+                'parent' => $parent,
             ));
         } else {
             // Assume we are in the CMP

@@ -5,15 +5,21 @@
  */
 require_once dirname(__FILE__) . '/model/resourcehider/resourcehider.class.php';
 
-class IndexManagerController extends modExtraManagerController {
-    public static function getDefaultController() { return 'home'; }
+class IndexManagerController extends modExtraManagerController
+{
+    public static function getDefaultController()
+    {
+        return 'home';
+    }
 }
 
-abstract class ResourceHiderManagerController extends modManagerController {
+abstract class ResourceHiderManagerController extends modManagerController
+{
     /** @var ResourceHider $resourcehider */
     public $resourcehider;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->resourcehider = new ResourceHider($this->modx);
 
         $this->addJavascript($this->resourcehider->config['js_url'] . 'mgr/resourcehidercmp.js');
@@ -25,9 +31,13 @@ abstract class ResourceHiderManagerController extends modManagerController {
         parent::initialize();
     }
 
-    public function getLanguageTopics() {
+    public function getLanguageTopics()
+    {
         return array('resourcehider:default');
     }
 
-    public function checkPermissions() { return true; }
+    public function checkPermissions()
+    {
+        return true;
+    }
 }
