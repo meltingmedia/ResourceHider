@@ -50,7 +50,6 @@ ResourceHider.Grid = function(config) {
         ,baseParams: {
             action: 'mgr/resource/getList'
             ,type: 'all'
-            ,resource: config.resource || false
         }
         ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree', 'show_in_tree']
         ,paging: true
@@ -83,7 +82,31 @@ ResourceHider.Grid = function(config) {
             ,fixed: true
             ,renderer: this.renderBoolean
         }]
-        ,tbar: this.setTopBar(config)
+        ,tbar: ['->', {
+            xtype: 'modx-combo-context'
+            ,url: ResourceHider.config.connector_url
+            ,value: _('resourcehider.all')
+            ,baseParams: {
+                action: 'mgr/context/getList'
+                ,exclude: 'mgr'
+                ,sortBy: 'rank'
+            }
+            ,listeners: {
+                select: function(combo, record, idx) {
+                    this.setBaseParam(combo, 'context_key')
+                }
+                ,scope: this
+            }
+        },'-',{
+            xtype: 'resourcehider-hiddentypes'
+            ,value: 'all'
+            ,listeners: {
+                select: function(combo, record, idx) {
+                    this.setBaseParam(combo, 'type')
+                }
+                ,scope: this
+            }
+        }]
     });
     ResourceHider.Grid.superclass.constructor.call(this, config);
 };
@@ -114,45 +137,6 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
         });
 
         return m;
-    }
-
-    ,setTopBar: function(config) {
-        var bar = [];
-        if (config.resource) {
-            console.log('set CRC top bar');
-            bar.push({
-               text: 'Create'
-            });
-        } else {
-            console.log('set CMP top bar');
-            bar.push('->', _('context'), '-', {
-                xtype: 'modx-combo-context'
-                ,url: ResourceHider.config.connector_url
-                ,value: _('resourcehider.all')
-                ,baseParams: {
-                    action: 'mgr/context/getList'
-                    ,exclude: 'mgr'
-                    ,sortBy: 'rank'
-                }
-                ,listeners: {
-                    select: function(combo, record, idx) {
-                        this.setBaseParam(combo, 'context_key')
-                    }
-                    ,scope: this
-                }
-            }, '-',{
-                xtype: 'resourcehider-hiddentypes'
-                ,value: 'all'
-                ,listeners: {
-                    select: function(combo, record, idx) {
-                        this.setBaseParam(combo, 'type')
-                    }
-                    ,scope: this
-                }
-            },'-');
-        }
-
-        return bar;
     }
 
     /**

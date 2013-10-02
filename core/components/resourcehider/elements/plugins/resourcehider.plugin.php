@@ -40,16 +40,7 @@ $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {
         ResourceHider.config = '. $modx->toJSON($rh->config) .';
         Ext.applyIf(MODx.lang, '. $modx->toJSON($modx->lexicon->loadCache('resourcehider')) .');
-
-        var modAB = Ext.getCmp("modx-action-buttons");
-        if (modAB) {
-            modAB.insert(0, new ResourceHider.Menu({
-                record: '. $modx->toJSON($objectArray) .'
-            }));
-            // Keep the spacing between buttons
-            modAB.insert(1, "-");
-            modAB.doLayout();
-        }
+        ResourceHider.load('. $modx->toJSON($objectArray) .');
     });
 </script>');
 

@@ -45,4 +45,20 @@ class HiddenChildren extends modResource
 //
 //        return $node;
 //    }
+
+    public function save($cacheFlag = null)
+    {
+        if ($this->class_key == 'HiddenChildren') {
+            $hide = true;
+        } else {
+            $hide = false;
+        }
+        $this->set('hide_children_in_tree', $hide);
+//        $this->fromArray(array(
+//            'class_key' => 'HiddenChildren',
+//            'hide_children_in_tree' => true,
+//        ));
+
+        return parent::save($cacheFlag);
+    }
 }
