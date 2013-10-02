@@ -29,8 +29,8 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
      * Well, this the the method which builds the split button :)
      */
     buildMenu: function() {
-        var record = this.record;
-        var menu = [];
+        var record = this.record
+            ,menu = [];
 
         // Resource specific
         if (record.show_in_tree) {
@@ -51,6 +51,8 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
 
     /**
      * Renders the whole split button
+     *
+     * @var {Array} menu
      */
     ,_setMenu: function(menu) {
         var hasMenu = (this.menu != null);
@@ -64,6 +66,8 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
 
     /**
      * Generates the appropriate menu entry
+     *
+     * @var {String} action
      */
     ,_setAction: function(action) {
         return {
@@ -77,6 +81,8 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
 
     /**
      * Updates the resource with the appropriate data
+     *
+     * @var {String} action
      */
     ,_performAction: function(action) {
         MODx.Ajax.request({

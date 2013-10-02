@@ -1,17 +1,22 @@
 <?php
-class ResourceHiderSetAction extends modObjectGetProcessor {
+
+class ResourceHiderSetAction extends modObjectGetProcessor
+{
     public $classKey = 'modResource';
     public $languageTopics = array('resourcehider:default');
 
     public $action;
     public $error;
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->action = $this->getProperty('perform');
+
         return parent::initialize();
     }
 
-    public function process() {
+    public function process()
+    {
         $result = $this->_perform();
         if ($result) {
             return parent::process();
@@ -20,6 +25,7 @@ class ResourceHiderSetAction extends modObjectGetProcessor {
         if (!$this->error) {
             $this->error = $this->modx->lexicon('resourcehider.error_msg_default');
         }
+
         return $this->failure($this->error);
     }
 
@@ -28,7 +34,8 @@ class ResourceHiderSetAction extends modObjectGetProcessor {
      *
      * @return bool If the operation went bad or fine :)
      */
-    private function _perform() {
+    private function _perform()
+    {
         switch ($this->action) {
             case 'show_in_tree':
                 $this->object->set('show_in_tree', true);
