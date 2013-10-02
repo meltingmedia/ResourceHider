@@ -6,21 +6,32 @@
  * @event OnDocFormPrerender
  * @package resourcehider
  */
-if ($modx->context->key != 'mgr') return;
+if ($modx->context->key != 'mgr') {
+    return;
+}
 $params = $modx->event->params;
 // only when updating a resource
-if ($params['mode'] !== modSystemEvent::MODE_UPD) return;
+if ($params['mode'] !== modSystemEvent::MODE_UPD) {
+    return;
+}
 /** @var modResource $resource */
 $resource =& $params['resource'];
 
-$rh = $modx->getService('resourcehider', 'ResourceHider', $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/') . 'model/resourcehider/');
-if (!($rh instanceof ResourceHider)) return;
+$path = $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/'). 'model/resourcehider/';
+$rh = $modx->getService('resourcehider', 'ResourceHider', $path);
+if (!($rh instanceof ResourceHider)) {
+    return;
+}
 
-if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) return;
+if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) {
+    return;
+}
 
 $allowedContexts = $rh->config['allowed_contexts'];
 if (!empty($allowedContexts)) {
-    if (!in_array($resource->get('context_key'), $allowedContexts)) return;
+    if (!in_array($resource->get('context_key'), $allowedContexts)) {
+        return;
+    }
 }
 
 $objectArray = $resource->toArray();
