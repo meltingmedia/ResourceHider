@@ -4,7 +4,7 @@ Ext.ns('ResourceHider');
  * @class ResourceHider.CMP
  * @extends MODx.Panel
  * @param {object} config
- * @xtype resourcehider-grid
+ * @xtype resourcehider-cmp
  */
 ResourceHider.CMP = function(config) {
     config = config || {};

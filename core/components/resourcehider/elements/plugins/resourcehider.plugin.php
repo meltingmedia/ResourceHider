@@ -6,27 +6,28 @@
  * @event OnDocFormPrerender
  * @package resourcehider
  */
+// Make sure we are in the manager
 if ($modx->context->key != 'mgr') {
     return;
 }
 $params = $modx->event->params;
-// only when updating a resource
+// Only when updating a resource
 if ($params['mode'] !== modSystemEvent::MODE_UPD) {
     return;
 }
 /** @var modResource $resource */
 $resource =& $params['resource'];
-
+// Get the service
 $path = $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/'). 'model/resourcehider/';
 $rh = $modx->getService('resourcehider', 'ResourceHider', $path);
 if (!($rh instanceof ResourceHider)) {
     return;
 }
-
+// Make sure the current resource used an allowed class key
 if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) {
     return;
 }
-
+// Make sure the resource is in a context where Resource Hider is allowed
 $allowedContexts = $rh->config['allowed_contexts'];
 if (!empty($allowedContexts)) {
     if (!in_array($resource->get('context_key'), $allowedContexts)) {
@@ -34,6 +35,7 @@ if (!empty($allowedContexts)) {
     }
 }
 
+// Seems like we are good to display the button
 $objectArray = $resource->toArray();
 $modx->regClientStartupScript($rh->config['js_url'] . 'mgr/resourcehider.js');
 $modx->regClientStartupScript('<script type="text/javascript">

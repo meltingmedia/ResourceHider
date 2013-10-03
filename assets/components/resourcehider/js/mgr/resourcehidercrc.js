@@ -1,22 +1,75 @@
 Ext.ns('ResourceHider');
-
+/**
+ * Perform the desired actions to display the children
+ *
+ * @param {Number} id
+ */
 ResourceHider.load = function(id) {
-    // Hide the collapse button causing visual glitches
-    var tabs = Ext.getCmp('modx-resource-tabs');
-    tabs.tools.toggle.hide();
+    // Configuration & required data
+    var tabs = Ext.getCmp('modx-resource-tabs')
+        ,panel = Ext.getCmp('modx-panel-resource')
+        ,content = Ext.getCmp('modx-resource-content')
 
-    var content = Ext.getCmp('modx-resource-content');
-    var contentAction = 'hide';
-    if (content) {
-        content[contentAction]();
-    }
+        ,target = ResourceHider.config['target']
+        ,contentAction = ResourceHider.config['content_action']
+        ,insertIdx = ResourceHider.config['insert_idx']
+        ,tabSetActive = ResourceHider.config['set_active_tab'];
 
-    // Add the children grid after the title
-    var panel = Ext.getCmp('modx-panel-resource');
-    panel.insert(1, {
+    // The content to be inserted in a tab
+    var tabContent = {
+        title: 'Children'
+        ,bodyCssClass: 'main-wrapper'
+        ,items: [{
+            xtype: 'resourcehider-grid'
+            ,resource: id
+        }]
+    };
+    // The content to be inserted in the main panel
+    var panelContent = {
         xtype: 'resourcehider-crc'
         ,resource: id
-    });
+    };
+
+    switch (target) {
+        case 'tabs':
+            // Place the grid at the desired place
+            if (insertIdx == 'last') {
+                tabs.add(tabContent);
+            } else {
+                // A numeric index has been given, let's insert
+                tabs.insert(insertIdx, tabContent);
+            }
+            if (tabSetActive) {
+                if (insertIdx == 'last') {
+                    insertIdx = tabs.items.length - 1;
+                }
+                // Make the inserted tab as active
+                tabs.setActiveTab(insertIdx);
+            }
+            break;
+        case 'panel':
+            if (insertIdx === 0) {
+                // Prevent inserting the grid before the panel title
+                insertIdx = 1;
+            }
+            if (insertIdx == 1) {
+                // Hide the "collapse" toggle causing visual glitches if grid is inserted after the panel title
+                tabs.tools.toggle.hide();
+            }
+            // Place the grid at the desired place
+            if (insertIdx == 'last') {
+                panel.add(panelContent);
+            } else {
+                // A numeric index has been given, let's insert
+                panel.insert(insertIdx, panelContent);
+            }
+            break;
+    }
+
+    // What to do with the content area : hide, collapse, none (nothing)
+    if (content && contentAction != 'none') {
+        content[contentAction]();
+    }
 };
 
 /**
@@ -29,7 +82,7 @@ ResourceHider.CRC = function(config) {
     config = config || {};
 
     Ext.apply(config, {
-        title: 'test'
+        title: 'Children'
         ,style: 'margin-top: 10px; margin-bottom: 10px'
         ,autoHeight: true
         ,collapsible: true

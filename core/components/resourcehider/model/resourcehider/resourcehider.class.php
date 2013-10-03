@@ -55,6 +55,12 @@ class ResourceHider
             'allowed_classes' => $allowedClasses,
             'allowed_contexts' => $allowedContexts,
 
+            // CRC config
+            'target' => $this->getOption('resourcehider.crc_target', null, 'tabs'),
+            'content_action' => $this->getOption('resourcehider.crc_content_action', null, 'hide'),
+            'insert_idx' => $this->getOption('resourcehider.crc_insert_idx', null, 'last'),
+            'set_active_tab' => $this->getOption('resourcehider.crc_set_active_tab', null, true),
+
             //'debug' => $this->modx->getOption("{$prefix}.debug", null, false),
             'debug' => $this->modx->getOption("{$prefix}.debug", null, true),
             'debug_user' => null,
@@ -72,6 +78,29 @@ class ResourceHider
         if ($this->config['add_package']) {
             $this->modx->addPackage($this->prefix, $this->config['model_path']);
         }
+    }
+
+    /**
+     * @param string $key
+     * @param null|array $options
+     * @param null|mixed $default
+     *
+     * @return mixed
+     */
+    public function getOption($key, $options = null, $default = null)
+    {
+        // System wide setting
+        $value = $this->modx->getOption($key, $options, $default);
+        if ($this->modx->controller->resource instanceof modResource) {
+            // Context override
+            $contextKey = $this->modx->controller->resource->context_key;
+            $ctx = $this->modx->getContext($contextKey);
+            if ($ctx && $ctx instanceof modContext) {
+                $value = $ctx->getOption($key, $value, $options);
+            }
+        }
+
+        return $value;
     }
 
     /**

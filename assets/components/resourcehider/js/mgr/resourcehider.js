@@ -3,9 +3,10 @@ Ext.ns('ResourceHider');
 ResourceHider.load = function(record) {
     var modAB = Ext.getCmp('modx-action-buttons');
     if (modAB) {
-        modAB.insert(0, new ResourceHider.Menu({
-            record: record
-        }));
+        modAB.insert(0, {
+            xtype: 'resourcehider-btn'
+            ,record: record
+        });
         // Keep the spacing between buttons
         modAB.insert(1, '-');
         modAB.doLayout();
@@ -16,6 +17,7 @@ ResourceHider.load = function(record) {
  * @class ResourceHider.Menu
  * @extends Ext.SplitButton
  * @param {object} config
+ * @xtype resourcehider-btn
  */
 ResourceHider.Menu = function(config) {
     config = config || {};
@@ -138,3 +140,4 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
         }
     }
 });
+Ext.reg('resourcehider-btn', ResourceHider.Menu);
