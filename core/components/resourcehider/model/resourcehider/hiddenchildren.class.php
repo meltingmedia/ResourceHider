@@ -12,24 +12,21 @@ class HiddenChildren extends modResource
             'hide_children_in_tree' => true,
             'isfolder' => true,
         ));
+
+        $this->xpdo->lexicon->load('resourcehider:default');
     }
 
     public function getContextMenuText()
     {
         return array(
-            'text_create' => 'Hidden container',
-            'text_create_here' => 'Create hidden container here',
+            'text_create' => $this->xpdo->lexicon('resourcehider.container'),
+            'text_create_here' => $this->xpdo->lexicon('resourcehider.container_create_here'),
         );
     }
 
     public function getResourceTypeName()
     {
-        return 'Hidden container';
-
-        $className = $this->_class;
-        if ($className == 'modDocument') $className = 'document';
-
-        return $this->xpdo->lexicon($className);
+        return $this->xpdo->lexicon('resourcehider.container');
     }
 
     public static function getControllerPath(xPDO &$modx)
@@ -54,10 +51,6 @@ class HiddenChildren extends modResource
             $hide = false;
         }
         $this->set('hide_children_in_tree', $hide);
-//        $this->fromArray(array(
-//            'class_key' => 'HiddenChildren',
-//            'hide_children_in_tree' => true,
-//        ));
 
         return parent::save($cacheFlag);
     }

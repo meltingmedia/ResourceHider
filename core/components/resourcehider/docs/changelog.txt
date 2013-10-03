@@ -2,6 +2,11 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
+2013/10/03 : ResourceHider 0.2.0-dev
+==============================================================================
+- Moved assets to manager folder
+- Added a Custom Resource Type to handle hidden children
+
 2012/12/15 : ResourceHider 0.1.2-dev
 ==============================================================================
 - Ability to activate the split button per context, default (empty) to all

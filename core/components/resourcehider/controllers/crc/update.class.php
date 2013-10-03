@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Update controller
+ */
 class HiddenChildrenUpdateManagerController extends ResourceUpdateManagerController
 {
     /** @var ResourceHider $resourcehider */
@@ -9,12 +11,12 @@ class HiddenChildrenUpdateManagerController extends ResourceUpdateManagerControl
     {
         // Get the ResourceHider service + load required assets
         $path = $this->modx->getOption(
-                'resourcehider.core_path',
-                null,
-                $this->modx->getOption('core_path') . 'components/resourcehider/'
+            'resourcehider.core_path',
+            null,
+            $this->modx->getOption('core_path') . 'components/resourcehider/'
         ). 'model/resourcehider/';
         $this->resourcehider = $this->modx->resourcehider = $this->modx->getService('resourcehider', 'ResourceHider', $path);
-        $this->addJavascript($this->resourcehider->config['js_url'] . 'mgr/resourcehidercrc.js');
+        $this->addJavascript($this->resourcehider->config['mgr_js_url'] . 'resourcehidercrc.js');
 
         // Load default form
         parent::loadCustomCssJs();

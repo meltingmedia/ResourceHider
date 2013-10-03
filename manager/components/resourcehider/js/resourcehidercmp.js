@@ -3,7 +3,7 @@ Ext.ns('ResourceHider');
 /**
  * @class ResourceHider.CMP
  * @extends MODx.Panel
- * @param {object} config
+ * @param {Object} config
  * @xtype resourcehider-cmp
  */
 ResourceHider.CMP = function(config) {
@@ -39,7 +39,7 @@ Ext.reg('resourcehider-cmp', ResourceHider.CMP);
 /**
  * @class ResourceHider.Grid
  * @extends MODx.grid.Grid
- * @param {object} config
+ * @param {Object} config
  * @xtype resourcehider-grid
  */
 ResourceHider.Grid = function(config) {
@@ -48,7 +48,7 @@ ResourceHider.Grid = function(config) {
     Ext.applyIf(config, {
         url: ResourceHider.config.connector_url
         ,baseParams: {
-            action: 'mgr/resource/getList'
+            action: 'resource/getList'
             ,type: 'all'
         }
         ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree', 'show_in_tree']
@@ -87,7 +87,7 @@ ResourceHider.Grid = function(config) {
             ,url: ResourceHider.config.connector_url
             ,value: _('resourcehider.all')
             ,baseParams: {
-                action: 'mgr/context/getList'
+                action: 'context/getList'
                 ,exclude: 'mgr'
                 ,sortBy: 'rank'
             }
@@ -172,7 +172,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
         MODx.Ajax.request({
             url: this.url
             ,params: {
-                action: 'mgr/resource/setAction'
+                action: 'resource/setAction'
                 ,id: id
                 ,perform: action
             }

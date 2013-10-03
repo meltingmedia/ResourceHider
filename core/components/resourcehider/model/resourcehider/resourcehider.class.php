@@ -1,6 +1,6 @@
 <?php
 /**
- * @package resourcehider
+ * Resource Hider service class
  */
 class ResourceHider
 {
@@ -19,9 +19,7 @@ class ResourceHider
         $this->prefix = $prefix = strtolower(get_class($this));
 
         $basePath = $this->modx->getOption("{$prefix}.core_path", $config, $this->modx->getOption('core_path') . "components/{$prefix}/");
-        $assetsPath = $this->modx->getOption("{$prefix}.assets_path" , $config, $this->modx->getOption('assets_path') . "components/{$prefix}/");
         $assetsUrl = $this->modx->getOption("{$prefix}.assets_url" , $config, $this->modx->getOption('assets_url') . "components/{$prefix}/");
-        $managerPath = $this->modx->getOption("{$prefix}.manager_path" , $config, $this->modx->getOption('manager_path') . "components/{$prefix}/");
         $managerUrl = $this->modx->getOption("{$prefix}.manager_url" , $config, $this->modx->getOption('manager_url') . "components/{$prefix}/");
 
         $classes = $this->modx->getOption('resourcehider.allowed_classes', $config, 'modDocument, modResource, modSymLink, modWebLink, modStaticResource');
@@ -41,28 +39,25 @@ class ResourceHider
 
             'add_package' => true,
 
-            'migrations_path' => $basePath . 'migrations/',
-
-            'use_autoloader' => false,
-            'vendor_path' => $basePath . 'vendor/',
-            'use_rte' => false,
-
             'js_url' => $assetsUrl . 'js/',
             'css_url' => $assetsUrl . 'css/',
             'assets_url' => $assetsUrl,
-            'connector_url' => $assetsUrl . 'connector.php',
+
+            'connector_url' => $managerUrl . 'connector.php',
+            'mgr_js_url' => $managerUrl . 'js/',
+            'mgr_css_url' => $managerUrl . 'css/',
 
             'allowed_classes' => $allowedClasses,
             'allowed_contexts' => $allowedContexts,
 
             // CRC config
-            'target' => $this->getOption('resourcehider.crc_target', null, 'tabs'),
-            'content_action' => $this->getOption('resourcehider.crc_content_action', null, 'hide'),
+            'target' => $this->getOption('resourcehider.crc_target', null, 'panel'),
+            'content_action' => $this->getOption('resourcehider.crc_content_action', null, 'none'),
             'insert_idx' => $this->getOption('resourcehider.crc_insert_idx', null, 'last'),
-            'set_active_tab' => $this->getOption('resourcehider.crc_set_active_tab', null, true),
+            'set_active_tab' => $this->getOption('resourcehider.crc_set_active_tab', null, false),
 
-            //'debug' => $this->modx->getOption("{$prefix}.debug", null, false),
-            'debug' => $this->modx->getOption("{$prefix}.debug", null, true),
+            // Debug stuff
+            'debug' => $this->modx->getOption("{$prefix}.debug", null, false),
             'debug_user' => null,
             'debug_user_id' => null,
         ), $config);
@@ -71,9 +66,6 @@ class ResourceHider
 
         if ($this->modx->getOption('debug', $this->config)) {
             $this->initDebug();
-        }
-        if ($this->config['use_autoloader']) {
-            $this->autoLoad();
         }
         if ($this->config['add_package']) {
             $this->modx->addPackage($this->prefix, $this->config['model_path']);
@@ -96,7 +88,7 @@ class ResourceHider
             $contextKey = $this->modx->controller->resource->context_key;
             $ctx = $this->modx->getContext($contextKey);
             if ($ctx && $ctx instanceof modContext) {
-                $value = $ctx->getOption($key, $value, $options);
+                $value = $ctx->getOption($key, ($default ? $default : $value), $options);
             }
         }
 
@@ -114,20 +106,5 @@ class ResourceHider
         ini_set('display_errors', true);
         //$this->modx->setLogTarget('FILE');
         $this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
-    }
-
-    /**
-     * Initialize the auto-loader if found
-     *
-     * @return void
-     */
-    private function autoLoad()
-    {
-        $loader = $this->config['vendor_path'] . 'autoload.php';
-        if (file_exists($loader)) {
-            require_once $loader;
-        } else {
-            $this->modx->log(modX::LOG_LEVEL_ERROR, 'Autoloader file not found');
-        }
     }
 }

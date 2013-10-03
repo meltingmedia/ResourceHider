@@ -18,7 +18,8 @@ $modx->lexicon->load('resourcehider:default');
 
 // handle request
 $path = $modx->getOption('processors_path', $modx->resourcehider->config, $corePath . 'processors/');
+$location = $modx->context->get('key') == 'mgr' ? 'mgr' : '';
 $modx->request->handleRequest(array(
     'processors_path' => $path,
-    'location' => '',
+    'location' => $location,
 ));

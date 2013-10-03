@@ -2,7 +2,7 @@ Ext.ns('ResourceHider');
 /**
  * Perform the desired actions to display the children
  *
- * @param {Number} id
+ * @param {Number} id The current resource ID
  */
 ResourceHider.load = function(id) {
     // Configuration & required data
@@ -17,8 +17,10 @@ ResourceHider.load = function(id) {
 
     // The content to be inserted in a tab
     var tabContent = {
-        title: 'Children'
+        title: _('resourcehider.grid_title')
         ,bodyCssClass: 'main-wrapper'
+        ,anchor: '100%'
+        ,layout: 'anchor'
         ,items: [{
             xtype: 'resourcehider-grid'
             ,resource: id
@@ -34,17 +36,15 @@ ResourceHider.load = function(id) {
         case 'tabs':
             // Place the grid at the desired place
             if (insertIdx == 'last') {
+                insertIdx = tabs.items.length;
                 tabs.add(tabContent);
             } else {
                 // A numeric index has been given, let's insert
                 tabs.insert(insertIdx, tabContent);
             }
-            if (tabSetActive) {
-                if (insertIdx == 'last') {
-                    insertIdx = tabs.items.length - 1;
-                }
-                // Make the inserted tab as active
-                tabs.setActiveTab(insertIdx);
+            if (~~tabSetActive === 1) {
+                // Make the inserted tab as active (type casting to integer)
+                tabs.setActiveTab(~~insertIdx);
             }
             break;
         case 'panel':
@@ -60,7 +60,6 @@ ResourceHider.load = function(id) {
             if (insertIdx == 'last') {
                 panel.add(panelContent);
             } else {
-                // A numeric index has been given, let's insert
                 panel.insert(insertIdx, panelContent);
             }
             break;
@@ -73,6 +72,8 @@ ResourceHider.load = function(id) {
 };
 
 /**
+ * The panel used in the CRC if not "embed" within the tab panel
+ *
  * @class ResourceHider.CRC
  * @extends MODx.Panel
  * @param {object} config
@@ -82,7 +83,7 @@ ResourceHider.CRC = function(config) {
     config = config || {};
 
     Ext.apply(config, {
-        title: 'Children'
+        title: _('resourcehider.grid_title')
         ,style: 'margin-top: 10px; margin-bottom: 10px'
         ,autoHeight: true
         ,collapsible: true
@@ -94,7 +95,7 @@ ResourceHider.CRC = function(config) {
             ,anchor: '100%'
         }
         ,items: [{
-            html: 'Description goes here'
+            html: _('resourcehider.grid_desc')
             ,bodyCssClass: 'panel-desc'
         },{
             bodyCssClass: 'main-wrapper'
@@ -110,6 +111,8 @@ Ext.extend(ResourceHider.CRC, MODx.Panel);
 Ext.reg('resourcehider-crc', ResourceHider.CRC);
 
 /**
+ * The grid used in the CRC to display (& CRUD) children
+ *
  * @class ResourceHider.Grid
  * @extends MODx.grid.Grid
  * @param {object} config
@@ -121,57 +124,149 @@ ResourceHider.Grid = function(config) {
     Ext.applyIf(config, {
         url: ResourceHider.config.connector_url
         ,baseParams: {
-            action: 'mgr/resource/getList'
-            ,type: 'all'
+            action: 'resource/getList'
             ,resource: config.resource || false
         }
-        ,fields: ['id', 'pagetitle', 'class_key', 'context_key', 'hide_children_in_tree', 'show_in_tree']
+        ,fields: ['id', 'pagetitle', 'class_key', 'published', 'publishedon']
         ,paging: true
         ,remoteSort: true
-        ,enableHdMenu: false
-        ,trackMouseOver: false
-        ,header: false
         ,anchor: '100%'
-        ,emptyText: _('resourcehider.no_result')
         ,columns: [{
             header: _('id')
             ,dataIndex: 'id'
-            ,width: 120
+            ,width: 80
             ,fixed: true
         },{
             header: _('pagetitle')
             ,dataIndex: 'pagetitle'
+        },{
+            header: _('published')
+            ,renderer: this.rendYesNo
+            ,dataIndex: 'published'
+            ,width: 120
+            ,fixed: true
         }]
+        ,viewConfig: {
+            forceFit: true
+            ,headersDisabled: true
+            ,autoFill: true
+            ,showPreview: true
+            ,scrollOffset: 0
+            ,emptyText: config.emptyText || _('ext_emptymsg')
+        }
         ,tbar: [{
-            text: 'Create'
-        }, '->', 'Search goes here']
+            text: _('create')
+            ,handler: this.create
+            ,scope: this
+        }, '->', {
+            xtype: 'trigger'
+            ,emptyText: _('resourcehider.search')
+            ,onTriggerClick: function(vent) {
+                if (this.getValue() !== '') {
+                    this.reset();
+                    this.fireEvent('change', this, '');
+                }
+            }
+            ,scope: this
+            ,listeners: {
+                change: {
+                    fn: this.search
+                    ,scope: this
+                }
+                ,render: {
+                    fn: function(cmp) {
+                        new Ext.KeyMap(cmp.getEl(), {
+                            key: Ext.EventObject.ENTER
+                            ,fn: function() {
+                                this.fireEvent('change', this);
+                                this.blur();
+                                return true;
+                            }
+                            ,scope: cmp
+                        });
+                    }
+                    ,scope: this
+                }
+            }
+        }]
     });
     ResourceHider.Grid.superclass.constructor.call(this, config);
 };
 Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     getMenu: function() {
         var m = [];
+        m.push({
+            text: _('edit')
+            ,handler: this.edit
+        });
+        m.push({
+            text: this.menu.record.published ? _('unpublish') : _('publish')
+            ,handler: this.togglePublish
+        });
+        m.push('-', {
+            text: _('delete')
+            ,handler: this.deleteResource
+        });
 
         return m;
     }
 
-    /**
-     * Sets the given baseParam in the grid's store & reloads the store
-     */
-    ,setBaseParam: function(combo, param) {
-        var store = this.getStore();
-        store.setBaseParam(param, combo.getValue());
-        store.removeAll();
+    ,search: function(elem, nv, ov) {
+        var s = this.getStore();
+        s.baseParams.query = elem.getValue() || nv;
         this.getBottomToolbar().changePage(1);
         this.refresh();
+    }
+
+    ,create: function() {
+        var action = MODx.action ? MODx.action['resource/create'] : 'resource/create';
+        location.href = '?a=' + action + '&parent=' + this.config.resource;
+    }
+
+    ,togglePublish: function() {
+        var me = this;
+        MODx.Ajax.request({
+            url: this.url
+            ,params: {
+                action: 'resource/togglePublish'
+                ,id: me.menu.record.id || false
+            }
+            ,listeners: {
+                success: {
+                    fn: this.refresh
+                    ,scope: me
+                }
+            }
+        });
+    }
+
+    ,deleteResource: function() {
+        var me = this;
+        MODx.msg.confirm({
+            title: _('resource_delete')
+            ,text: _('resource_delete_confirm')
+            ,url: me.url
+            ,params: {
+                action: 'resource/delete'
+                ,id: me.menu.record.id
+            }
+            ,listeners: {
+                success: {
+                    fn: this.refresh
+                    ,scope: me
+                }
+            }
+        });
     }
 
     /**
      * Edit the resource
      */
-    ,edit: function(record) {
-        var action = MODx.action ? MODx.action['resource/update'] : 'resource/update';
-        var classKey = '';
+    ,edit: function() {
+        var action = MODx.action ? MODx.action['resource/update'] : 'resource/update'
+            ,record = this.menu.record
+            ,classKey = '';
+
         if (record.class_key != 'modDocument' && record.class_key != 'modResource') {
             classKey = '&class_key=' + record.class_key;
         }

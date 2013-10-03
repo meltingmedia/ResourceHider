@@ -35,9 +35,16 @@ if (!empty($allowedContexts)) {
     }
 }
 
+// Make sure the parent is not a container with hidden children
+$parent = $resource->getOne('Parent');
+if ($parent && $parent->get('class_key') === 'HiddenChildren') {
+    // @todo: back to container button ?
+    return;
+}
+
 // Seems like we are good to display the button
 $objectArray = $resource->toArray();
-$modx->regClientStartupScript($rh->config['js_url'] . 'mgr/resourcehider.js');
+$modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
 $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {
         ResourceHider.config = '. $modx->toJSON($rh->config) .';

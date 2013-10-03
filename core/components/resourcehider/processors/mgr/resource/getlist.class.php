@@ -23,9 +23,6 @@ class ResourceHiderGetList extends modObjectGetListProcessor
     {
         $c->leftJoin('modContext', 'Context');
         $c->select(array('id', 'context_key', 'hide_children_in_tree', 'show_in_tree', 'pagetitle'));
-        $c->where(array(
-            'class_key:IN' => $this->allowed,
-        ));
 
         $parent = $this->getProperty('resource');
         if (isset($parent) && !empty($parent)) {
@@ -34,6 +31,9 @@ class ResourceHiderGetList extends modObjectGetListProcessor
                 'parent' => $parent,
             ));
         } else {
+            $c->where(array(
+                'class_key:IN' => $this->allowed,
+            ));
             // Assume we are in the CMP
             $type = $this->getProperty('type');
             if (!empty($type)) {
@@ -67,6 +67,15 @@ class ResourceHiderGetList extends modObjectGetListProcessor
                     'context_key' => $ctx,
                 ));
             }
+        }
+
+        $query = $this->getProperty('query');
+        if (!empty($query)) {
+            $query = '%'. $query .'%';
+            $c->where(array(
+                'pagetitle:LIKE' => $query,
+                'OR:longtitle:LIKE' => $query,
+            ));
         }
 
         return $c;

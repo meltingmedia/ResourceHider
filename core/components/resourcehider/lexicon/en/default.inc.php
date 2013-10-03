@@ -20,10 +20,27 @@ $_lang['resourcehider.hide_children_in_tree'] = 'Hide children';
 $_lang['resourcehider.hide_in_tree'] = 'Hide in tree';
 $_lang['resourcehider.menu_desc'] = 'Restore lost resources';
 $_lang['resourcehider.no_result'] = 'All your resources should be visible!';
+$_lang['resourcehider.search'] = 'Search...';
 $_lang['resourcehider.show_children_in_tree'] = 'Show children';
 $_lang['resourcehider.show_in_tree'] = 'Show in tree';
 $_lang['resourcehider.success_msg'] = 'Seems like everything went fine';
 $_lang['resourcehider.success_msg_title'] = 'Success';
+// CRC related
+$_lang['resourcehider.grid_desc'] = 'Manage this resource\'s children here.';
+$_lang['resourcehider.grid_title'] = 'Children';
+$_lang['resourcehider.container'] = 'Hidden children container';
+$_lang['resourcehider.container_create_here'] = 'Create Hidden children container here';
+
+// System/context settings
+$_lang['area_crc'] = 'Resource Hider Custom Resource Type';
+$_lang['setting_resourcehider.crc_content_action'] = 'Content field';
+$_lang['setting_resourcehider.crc_content_action_desc'] = 'What would you like to do with the content field ? Allowed values are "hide", "collapse", and the default being "none" (do nothing).';
+$_lang['setting_resourcehider.crc_insert_idx'] = 'Insert at indx';
+$_lang['setting_resourcehider.crc_insert_idx_desc'] = 'Where would you like to insert the grid ? Allowed values are positive integers, or the default value being "last", which adds the grid at the end of the chosen container/target.';
+$_lang['setting_resourcehider.crc_set_active_tab'] = 'Activate tab';
+$_lang['setting_resourcehider.crc_set_active_tab_desc'] = 'If the chosen container/target is the tab panel, activate this option if you would like the grid tab to be set as active per default.';
+$_lang['setting_resourcehider.crc_target'] = 'Container';
+$_lang['setting_resourcehider.crc_target_desc'] = 'Define the container you would like the grid to be added on. Allowed values are "tabs" (to target the tab panel), or the default one "panel".';
 
 $_lang['setting_resourcehider.assets_url'] = 'Assets URL';
 $_lang['setting_resourcehider.assets_url_desc'] = 'The URL to Resource Hider assets';
@@ -33,3 +50,5 @@ $_lang['setting_resourcehider.allowed_contexts'] = 'Allowed contexts';
 $_lang['setting_resourcehider.allowed_contexts_desc'] = 'A comma separated list of context keys in which you want to be able to change the resources\' visibility. Default to all contexts.';
 $_lang['setting_resourcehider.core_path'] = 'Core path';
 $_lang['setting_resourcehider.core_path_desc'] = 'The absolute path Resource Hider component';
+$_lang['setting_resourcehider.manager_url'] = 'Manager assets URL';
+$_lang['setting_resourcehider.manager_url_desc'] = 'The URL to manager assets for Resource Hider';
