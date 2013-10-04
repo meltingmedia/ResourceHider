@@ -39,6 +39,11 @@ class ResourceHider
 
             'add_package' => true,
 
+            'migrations_path' => $basePath . 'migrations/',
+
+            'use_autoloader' => true,
+            'vendor_path' => $basePath . 'vendor/',
+
             'js_url' => $assetsUrl . 'js/',
             'css_url' => $assetsUrl . 'css/',
             'assets_url' => $assetsUrl,
@@ -66,6 +71,9 @@ class ResourceHider
 
         if ($this->modx->getOption('debug', $this->config)) {
             $this->initDebug();
+        }
+        if ($this->config['use_autoloader']) {
+            $this->autoLoad();
         }
         if ($this->config['add_package']) {
             $this->modx->addPackage($this->prefix, $this->config['model_path']);
@@ -106,5 +114,20 @@ class ResourceHider
         ini_set('display_errors', true);
         //$this->modx->setLogTarget('FILE');
         $this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
+    }
+
+    /**
+     * Initialize the auto-loader if found
+     *
+     * @return void
+     */
+    private function autoLoad()
+    {
+        $loader = $this->config['vendor_path'] . 'autoload.php';
+        if (file_exists($loader)) {
+            require_once $loader;
+        } else {
+            $this->modx->log(modX::LOG_LEVEL_ERROR, 'Autoloader file not found');
+        }
     }
 }

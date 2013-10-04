@@ -9,33 +9,37 @@ $tstart = explode(' ', microtime());
 $tstart = $tstart[1] + $tstart[0];
 set_time_limit(0);
 
-/* define package names */
+// Define package names
 define('PKG_NAME', 'ResourceHider');
-define('PKG_NAME_LOWER', 'resourcehider');
+define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 define('PKG_VERSION', '0.1.2');
 define('PKG_RELEASE', 'dev');
 
-/* define build paths */
+// Define build paths
 $root = dirname(dirname(__FILE__)) . '/';
 $sources = array(
     'root' => $root,
     'build' => $root . '_build/',
     'data' => $root . '_build/data/',
+    'resolvers' => $root . '_build/resolvers/',
     'docs' => $root.'core/components/'. PKG_NAME_LOWER .'/docs/',
+    'chunks' => $root . 'core/components/'. PKG_NAME_LOWER .'/chunks/',
+    'lexicon' => $root . 'core/components/'. PKG_NAME_LOWER .'/lexicon/',
     'elements' => $root.'core/components/'. PKG_NAME_LOWER .'/elements/',
     'source_assets' => $root.'assets/components/'. PKG_NAME_LOWER,
     'source_core' => $root.'core/components/'. PKG_NAME_LOWER,
 );
 unset($root);
 
-// override with your own defines here (see build.config.sample.php)
+// Override with your own defines here (see build.config.sample.php)
 require_once $sources['build'] . 'build.config.php';
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
-require_once $sources['build'] . '/includes/functions.php';
+require_once $sources['build'] . '/includes/helper.php';
 
 $modx = new modX();
 $modx->initialize('mgr');
-echo '<pre>'; /* used for nice formatting of log messages */
+// Used for nice formatting of log messages
+if (!XPDO_CLI_MODE) echo '<pre>';
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 
@@ -44,13 +48,13 @@ $builder = new modPackageBuilder($modx);
 $builder->createPackage(PKG_NAME_LOWER, PKG_VERSION, PKG_RELEASE);
 $builder->registerNamespace(PKG_NAME_LOWER, false, true, '{core_path}components/'. PKG_NAME_LOWER .'/');
 
-// create category
+// Create category
 /** @var $category modCategory */
 $category = $modx->newObject('modCategory');
 $category->set('id', 1);
 $category->set('category', PKG_NAME);
 
-// add plugins
+// Add plugins
 $plugins = include $sources['data'].'transport.plugins.php';
 if (!is_array($plugins)) {
     $modx->log(modX::LOG_LEVEL_FATAL, 'Adding plugins failed.');
@@ -77,7 +81,7 @@ $modx->log(modX::LOG_LEVEL_INFO, 'Packaged in '.count($plugins).' plugins.');
 flush();
 unset($plugins, $plugin, $attributes);
 
-// create category vehicle
+// Create category vehicle
 $attr = array(
     xPDOTransport::UNIQUE_KEY => 'category',
     xPDOTransport::PRESERVE_KEYS => false,
@@ -104,7 +108,7 @@ $vehicle->resolve('file', array(
 ));
 $builder->putVehicle($vehicle);
 
-// load menu
+// Load menu
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
 $menu = include $sources['data'] . 'transport.menu.php';
 if (empty($menu)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
@@ -121,10 +125,14 @@ $vehicle = $builder->createVehicle($menu, array (
         ),
     ),
 ));
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding in PHP resolvers...');
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'master.php',
+));
 $builder->putVehicle($vehicle);
 unset($vehicle, $menu);
 
-// now pack in the license file, readme and setup options
+// Now pack in the license file, readme and setup options
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding package attributes and setup options...');
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
@@ -135,12 +143,13 @@ $builder->setPackageAttributes(array(
     ),*/
 ));
 
-// zip up package
+// Zip up package
 $modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
 $builder->pack();
 
-$tend = explode(" ", microtime());
+$tend = explode(' ', microtime());
 $tend = $tend[1] + $tend[0];
 $totalTime = sprintf("%2.4f s", ($tend - $tstart));
-$modx->log(modX::LOG_LEVEL_INFO, "\n<br />Package Built.<br />\nExecution time: {$totalTime}\n");
+$modx->log(modX::LOG_LEVEL_INFO, "\n\nPackage Built. \nExecution time: {$totalTime}\n");
+if (!XPDO_CLI_MODE) echo '</pre>';
 exit ();

@@ -1,0 +1,13 @@
+{
+    "repositories": [{
+        "type": "composer",
+        "url": "https://composer.melting-media.com"
+    }],
+    "require": {
+        "meltingmedia/migration": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "preferred-install": "dist"
+    }
+}
