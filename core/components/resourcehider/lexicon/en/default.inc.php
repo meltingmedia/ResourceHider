@@ -38,7 +38,7 @@ $_lang['setting_resourcehider.crc_content_action_desc'] = 'What would you like t
 $_lang['setting_resourcehider.crc_insert_idx'] = 'Insert at indx';
 $_lang['setting_resourcehider.crc_insert_idx_desc'] = 'Where would you like to insert the grid ? Allowed values are positive integers, or the default value being "last", which adds the grid at the end of the chosen container/target.';
 $_lang['setting_resourcehider.crc_set_active_tab'] = 'Activate tab';
-$_lang['setting_resourcehider.crc_set_active_tab_desc'] = 'If the chosen container/target is the tab panel, activate this option if you would like the grid tab to be set as active per default.';
+$_lang['setting_resourcehider.crc_set_active_tab_desc'] = 'If the chosen container/target is the tab panel, activate this option if you would like the tab the grid is into be set as active per default.';
 $_lang['setting_resourcehider.crc_target'] = 'Container';
 $_lang['setting_resourcehider.crc_target_desc'] = 'Define the container you would like the grid to be added on. Allowed values are "tabs" (to target the tab panel), or the default one "panel".';
 
