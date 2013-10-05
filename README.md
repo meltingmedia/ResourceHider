@@ -6,6 +6,8 @@ This makes use of hide_children_in_tree & show_in_tree columns.
 
 NOTE : You can easily restore your resources with the Custom Manager Page
 
+Since v0.2.x, Resource Hider is shipped with a Custom Resource Class to help your users manage hidden children.
+
 ## Installation
 
 * Install from package manager
@@ -13,7 +15,7 @@ NOTE : You can easily restore your resources with the Custom Manager Page
 
 ## Information
 
-ResourceHider is currently (and always should be) in constant development.
+Resource Hider is currently (and always should be) in constant development.
 
 ## License
 
