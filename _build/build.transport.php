@@ -1,9 +1,6 @@
 <?php
 /**
- * ResourceHider build script
- *
- * @package resourcehider
- * @subpackage build
+ * Build script to create the transport package
  */
 $tstart = explode(' ', microtime());
 $tstart = $tstart[1] + $tstart[0];
@@ -12,7 +9,7 @@ set_time_limit(0);
 // Define package names
 define('PKG_NAME', 'ResourceHider');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
-define('PKG_VERSION', '0.1.2');
+define('PKG_VERSION', '0.2.1');
 define('PKG_RELEASE', 'dev');
 
 // Define build paths
@@ -27,6 +24,7 @@ $sources = array(
     'lexicon' => $root . 'core/components/'. PKG_NAME_LOWER .'/lexicon/',
     'elements' => $root.'core/components/'. PKG_NAME_LOWER .'/elements/',
     'source_assets' => $root.'assets/components/'. PKG_NAME_LOWER,
+    'manager_assets' => $root.'manager/components/'. PKG_NAME_LOWER,
     'source_core' => $root.'core/components/'. PKG_NAME_LOWER,
 );
 unset($root);
@@ -60,26 +58,9 @@ if (!is_array($plugins)) {
     $modx->log(modX::LOG_LEVEL_FATAL, 'Adding plugins failed.');
 }
 $category->addMany($plugins);
-$attributes = array(
-    xPDOTransport::UNIQUE_KEY => 'name',
-    xPDOTransport::PRESERVE_KEYS => false,
-    xPDOTransport::UPDATE_OBJECT => true,
-    xPDOTransport::RELATED_OBJECTS => true,
-    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
-        'PluginEvents' => array(
-            xPDOTransport::PRESERVE_KEYS => true,
-            xPDOTransport::UPDATE_OBJECT => false,
-            xPDOTransport::UNIQUE_KEY => array('pluginid', 'event'),
-        ),
-    ),
-);
-foreach ($plugins as $plugin) {
-    $vehicle = $builder->createVehicle($plugin, $attributes);
-    $builder->putVehicle($vehicle);
-}
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaged in '.count($plugins).' plugins.');
 flush();
-unset($plugins, $plugin, $attributes);
+unset($plugins);
 
 // Create category vehicle
 $attr = array(
@@ -92,6 +73,14 @@ $attr = array(
             xPDOTransport::PRESERVE_KEYS => false,
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',
+            xPDOTransport::RELATED_OBJECTS => true,
+            xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
+                'PluginEvents' => array(
+                    xPDOTransport::PRESERVE_KEYS => true,
+                    xPDOTransport::UPDATE_OBJECT => false,
+                    xPDOTransport::UNIQUE_KEY => array('pluginid', 'event'),
+                ),
+            ),
         ),
     ),
 );
@@ -99,8 +88,8 @@ $vehicle = $builder->createVehicle($category, $attr);
 
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding file resolvers to category...');
 $vehicle->resolve('file', array(
-    'source' => $sources['source_assets'],
-    'target' => "return MODX_ASSETS_PATH . 'components/';",
+    'source' => $sources['manager_assets'],
+    'target' => "return MODX_MANAGER_PATH . 'components/';",
 ));
 $vehicle->resolve('file', array(
     'source' => $sources['source_core'],
@@ -111,7 +100,9 @@ $builder->putVehicle($vehicle);
 // Load menu
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
 $menu = include $sources['data'] . 'transport.menu.php';
-if (empty($menu)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
+if (empty($menu)) {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
+}
 $vehicle = $builder->createVehicle($menu, array (
     xPDOTransport::PRESERVE_KEYS => true,
     xPDOTransport::UPDATE_OBJECT => true,

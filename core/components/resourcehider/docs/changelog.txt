@@ -2,6 +2,12 @@
 Changelog file for ResourceHider
 --------------------------------------------------------------------------------
 
+2013/10/05 : ResourceHider 0.2.1-dev
+==============================================================================
+- Fixed issue where processors were not found in the CMP due to recent
+  refactoring
+- [#11] Fixed plugin & events packaging
+
 2013/10/03 : ResourceHider 0.2.0-dev
 ==============================================================================
 - Moved assets to manager folder

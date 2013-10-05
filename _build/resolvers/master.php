@@ -1,7 +1,9 @@
 <?php
-
-use meltingmedia\migration\Helper;
-
+/**
+ * Master resolver to handle migrations & upgrades
+ *
+ * @var xPDOObject|null $object
+ */
 if ($object->xpdo) {
     /** @var $modx modX */
     $modx =& $object->xpdo;
@@ -14,7 +16,7 @@ if ($object->xpdo) {
         $service = $modx->getService('resourcehider', 'ResourceHider', $modelPath .'resourcehider/');
     }
 
-    $migration = new Helper($modx, array(
+    $migration = new meltingmedia\migration\Helper($modx, array(
         'component_name' => 'ResourceHider',
         'package_name' => 'resourcehider',
         'namespace' => $options['namespace'],
@@ -29,6 +31,7 @@ if ($object->xpdo) {
     if ($options[xPDOTransport::PACKAGE_ACTION] == xPDOTransport::ACTION_INSTALL or
         $options[xPDOTransport::PACKAGE_ACTION] == xPDOTransport::ACTION_UPGRADE
     ) {
+        // Common stuff for install/upgrade
         $name = $options['namespace'];
         $thisVersion = str_replace($name . '-', '', $tmpVersion);
         // Add package to manipulate tables
@@ -36,6 +39,15 @@ if ($object->xpdo) {
             $modx->addPackage('resourcehider', $modelPath);
         }
         $m = $modx->getManager();
+
+        // Extension package
+        $extPack = $modx->getOption('resourcehider.core_path');
+        if (empty($extPack)) {
+            $extPack = '[[++core_path]]components/resourcehider/model/';
+        }
+        if ($modx instanceof modX) {
+            $modx->addExtensionPackage('resourcehider', $extPack);
+        }
 
         switch ($options[xPDOTransport::PACKAGE_ACTION]) {
             case xPDOTransport::ACTION_INSTALL:
@@ -66,9 +78,15 @@ if ($object->xpdo) {
         $version = $thisVersion;
 
     } else {
+        // Uninstall
         $version = $migration->getPreviousFromDB($tmpVersion);
         $modx->log(modX::LOG_LEVEL_INFO, 'Uninstalling' . print_r($options, true));
         $modx->log(modX::LOG_LEVEL_INFO, 'previous installed version : ' . $version);
+
+        // Remove extension package
+        if ($modx instanceof modX) {
+            $modx->removeExtensionPackage('resourcehider');
+        }
     }
 
     // Update the version setting

@@ -22,7 +22,7 @@ abstract class ResourceHiderManagerController extends modManagerController
     {
         $this->resourcehider = new ResourceHider($this->modx);
 
-        $this->addJavascript($this->resourcehider->config['js_url'] . 'mgr/resourcehidercmp.js');
+        $this->addJavascript($this->resourcehider->config['mgr_js_url'] . 'resourcehidercmp.js');
         $this->addHtml('<script type="text/javascript">
         Ext.onReady(function() {
             ResourceHider.config = '. $this->modx->toJSON($this->resourcehider->config) .';
