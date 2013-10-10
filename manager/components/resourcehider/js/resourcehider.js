@@ -134,12 +134,13 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
                         this.buildMenu();
                         this._refreshTree();
 
-                        // @todo: make this de-activable
-                        MODx.msg.status({
-                            title: _('resourcehider.success_msg_title')
-                            ,message: _('resourcehider.success_msg')
-                            ,delay: 1
-                        });
+                        if (ResourceHider.config.show_status == 1) {
+                            MODx.msg.status({
+                                title: _('resourcehider.success_msg_title')
+                                ,message: _('resourcehider.success_msg')
+                                ,delay: 1
+                            });
+                        }
                     }
                     ,scope: this
                 }
@@ -152,10 +153,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
      */
     ,_refreshTree: function() {
         var tree = Ext.getCmp('modx-resource-tree');
-        console.log(tree);
-        // @todo make sure the tree is visible
         if (tree) {
-            // @todo find a way to just reload the appropriate node
             tree.refresh();
         }
     }

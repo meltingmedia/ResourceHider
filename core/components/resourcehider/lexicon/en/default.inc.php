@@ -48,6 +48,7 @@ $_lang['setting_resourcehider.crc_set_active_tab_desc'] = 'If the chosen contain
 $_lang['setting_resourcehider.crc_target'] = 'Container';
 $_lang['setting_resourcehider.crc_target_desc'] = 'Define the container you would like the grid to be added on. Allowed values are "tabs" (to target the tab panel), or the default one "panel".';
 
+$_lang['area_general'] = 'General config';
 $_lang['setting_resourcehider.assets_url'] = 'Assets URL';
 $_lang['setting_resourcehider.assets_url_desc'] = 'The URL to Resource Hider assets';
 $_lang['setting_resourcehider.allowed_classes'] = 'Allowed classes';
@@ -58,3 +59,5 @@ $_lang['setting_resourcehider.core_path'] = 'Core path';
 $_lang['setting_resourcehider.core_path_desc'] = 'The absolute path Resource Hider component';
 $_lang['setting_resourcehider.manager_url'] = 'Manager assets URL';
 $_lang['setting_resourcehider.manager_url_desc'] = 'The URL to manager assets for Resource Hider';
+$_lang['setting_resourcehider.show_status'] = 'Show status';
+$_lang['setting_resourcehider.show_status_desc'] = 'Whether or not to show status messages when an action occurs.';

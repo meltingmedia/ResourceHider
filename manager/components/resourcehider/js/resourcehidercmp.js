@@ -193,7 +193,6 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
      */
     ,_refreshTree: function() {
         var tree = Ext.getCmp('modx-resource-tree');
-        // @todo make sure the tree is visible
         if (tree) {
             tree.refresh();
         }

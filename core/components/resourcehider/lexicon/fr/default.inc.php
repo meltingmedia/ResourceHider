@@ -59,3 +59,5 @@ $_lang['setting_resourcehider.core_path'] = 'Chemin du core';
 $_lang['setting_resourcehider.core_path_desc'] = 'Le chemin aboslu vers le core du composant Resource Hider';
 $_lang['setting_resourcehider.manager_url'] = 'URL des assets du manager';
 $_lang['setting_resourcehider.manager_url_desc'] = 'URL vers les assets du manager pour Resource Hider';
+$_lang['setting_resourcehider.show_status'] = 'Afficher les status';
+$_lang['setting_resourcehider.show_status_desc'] = 'Activez cette option pour afficher les status des actions.';

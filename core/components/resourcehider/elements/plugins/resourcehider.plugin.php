@@ -3,8 +3,9 @@
  * ResourceHider Plugin
  *
  * @var modX $modx
+ * @var array $scriptProperties
+ *
  * @event OnDocFormPrerender
- * @package resourcehider
  */
 // Make sure we are in the manager
 if ($modx->context->key != 'mgr') {
@@ -23,10 +24,6 @@ $rh = $modx->getService('resourcehider', 'ResourceHider', $path);
 if (!($rh instanceof ResourceHider)) {
     return;
 }
-// Make sure the current resource used an allowed class key
-if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) {
-    return;
-}
 // Make sure the resource is in a context where Resource Hider is allowed
 $allowedContexts = $rh->config['allowed_contexts'];
 if (!empty($allowedContexts)) {
@@ -34,21 +31,23 @@ if (!empty($allowedContexts)) {
         return;
     }
 }
+// Make sure the current resource uses an allowed class key
+if (!in_array($resource->get('class_key'), $rh->config['allowed_classes'])) {
+    return;
+}
 
-// Make sure the parent is not a container with hidden children
+// Define the appropriate action according to the parent being a container with hidden children or not
 $parent = $resource->getOne('Parent');
 if ($parent && $parent->get('class_key') === 'HiddenChildren') {
     // Back to container button
-    $modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
     $load = 'ResourceHider.loadBack();';
-    //return;
 } else {
     // Normal split button
+    $objectArray = $resource->toArray();
     $load = 'ResourceHider.load('. $modx->toJSON($objectArray) .');';
 }
 
 // Seems like we are good to display the button
-$objectArray = $resource->toArray();
 $modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
 $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {

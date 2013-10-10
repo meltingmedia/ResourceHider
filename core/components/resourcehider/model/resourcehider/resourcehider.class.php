@@ -54,6 +54,7 @@ class ResourceHider
 
             'allowed_classes' => $allowedClasses,
             'allowed_contexts' => $allowedContexts,
+            'show_status' => $this->modx->getOption('resourcehider.show_status', null, false),
 
             // CRC config
             'target' => $this->getOption('resourcehider.crc_target', null, 'panel'),
