@@ -11,9 +11,23 @@ ResourceHider.load = function(record) {
         modAB.insert(0, {
             xtype: 'resourcehider-btn'
             ,record: record
-        });
-        // Keep the spacing between buttons
-        modAB.insert(1, '-');
+        }, '-');
+        modAB.doLayout();
+    }
+};
+/**
+ * Load the "back to container" button
+ */
+ResourceHider.loadBack = function() {
+    var modAB = Ext.getCmp('modx-action-buttons');
+    if (modAB && MODx.request['parent']) {
+        var action = MODx.action ? MODx.action['resource/update'] : 'resource/update';
+        modAB.insert(0, {
+            text: _('resourcehider.back_btn')
+            ,handler: function() {
+                location.href = '?a='+ action +'&id='+ MODx.request['parent'];
+            }
+        }, '-');
         modAB.doLayout();
     }
 };
@@ -138,6 +152,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
      */
     ,_refreshTree: function() {
         var tree = Ext.getCmp('modx-resource-tree');
+        console.log(tree);
         // @todo make sure the tree is visible
         if (tree) {
             // @todo find a way to just reload the appropriate node

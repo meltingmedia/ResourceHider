@@ -38,8 +38,13 @@ if (!empty($allowedContexts)) {
 // Make sure the parent is not a container with hidden children
 $parent = $resource->getOne('Parent');
 if ($parent && $parent->get('class_key') === 'HiddenChildren') {
-    // @todo: back to container button ?
-    return;
+    // Back to container button
+    $modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
+    $load = 'ResourceHider.loadBack();';
+    //return;
+} else {
+    // Normal split button
+    $load = 'ResourceHider.load('. $modx->toJSON($objectArray) .');';
 }
 
 // Seems like we are good to display the button
@@ -49,7 +54,7 @@ $modx->regClientStartupScript('<script type="text/javascript">
     Ext.onReady(function() {
         ResourceHider.config = '. $modx->toJSON($rh->config) .';
         Ext.applyIf(MODx.lang, '. $modx->toJSON($modx->lexicon->loadCache('resourcehider')) .');
-        ResourceHider.load('. $modx->toJSON($objectArray) .');
+        '. $load .'
     });
 </script>');
 

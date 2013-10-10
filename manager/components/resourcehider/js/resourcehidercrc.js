@@ -155,7 +155,7 @@ ResourceHider.Grid = function(config) {
             ,emptyText: config.emptyText || _('ext_emptymsg')
         }
         ,tbar: [{
-            text: _('create')
+            text: _('resourcehider.create')
             ,handler: this.create
             ,scope: this
         }, '->', {
@@ -196,15 +196,15 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     getMenu: function() {
         var m = [];
         m.push({
-            text: _('edit')
+            text: _('resourcehider.edit')
             ,handler: this.edit
         });
         m.push({
-            text: this.menu.record.published ? _('unpublish') : _('publish')
+            text: this.menu.record.published ? _('resourcehider.unpublish') : _('resourcehider.publish')
             ,handler: this.togglePublish
         });
         m.push('-', {
-            text: _('delete')
+            text: _('resourcehider.delete')
             ,handler: this.deleteResource
         });
 
@@ -219,8 +219,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     }
 
     ,create: function() {
-        var action = MODx.action ? MODx.action['resource/create'] : 'resource/create';
-        location.href = '?a=' + action + '&parent=' + this.config.resource;
+        location.href = '?a=' + this.getMODxAction('resource/update') + '&parent=' + this.config.resource;
     }
 
     ,togglePublish: function() {
@@ -259,18 +258,22 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
         });
     }
 
+    ,getMODxAction: function(action) {
+        return MODx.action ? MODx.action[action] : action;
+    }
+
     /**
      * Edit the resource
      */
     ,edit: function() {
-        var action = MODx.action ? MODx.action['resource/update'] : 'resource/update'
+        var action = this.getMODxAction('resource/update')
             ,record = this.menu.record
             ,classKey = '';
 
         if (record.class_key != 'modDocument' && record.class_key != 'modResource') {
             classKey = '&class_key=' + record.class_key;
         }
-        location.href = '?a=' + action + '&id=' + record.id + classKey;
+        location.href = '?a=' + action + '&id=' + record.id + classKey + '&parent=' + this.config.resource;
     }
 });
 Ext.reg('resourcehider-grid', ResourceHider.Grid);

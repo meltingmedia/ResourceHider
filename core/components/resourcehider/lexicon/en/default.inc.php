@@ -7,6 +7,7 @@
  */
 $_lang['resourcehider'] = 'Resource Hider';
 $_lang['resourcehider.all'] = 'All contexts';
+$_lang['resourcehider.back_btn'] = 'Back to container';
 $_lang['resourcehider.button'] = 'Resource visibility';
 $_lang['resourcehider.cmp_intro'] = '<h3>Is your resource lost ?</h3>Here you can find resources marked as « hidden form the resource tree » and resources with hidden children.';
 $_lang['resourcehider.error_msg_default'] = 'Something unknown went… not as expected, sorry';
@@ -26,10 +27,15 @@ $_lang['resourcehider.show_in_tree'] = 'Show in tree';
 $_lang['resourcehider.success_msg'] = 'Seems like everything went fine';
 $_lang['resourcehider.success_msg_title'] = 'Success';
 // CRC related
-$_lang['resourcehider.grid_desc'] = 'Manage this resource\'s children here.';
-$_lang['resourcehider.grid_title'] = 'Children';
 $_lang['resourcehider.container'] = 'Hidden children container';
 $_lang['resourcehider.container_create_here'] = 'Create Hidden children container here';
+$_lang['resourcehider.create'] = 'Create';
+$_lang['resourcehider.delete'] = 'Delete';
+$_lang['resourcehider.edit'] = 'Edit';
+$_lang['resourcehider.grid_desc'] = 'Manage this resource\'s children here.';
+$_lang['resourcehider.grid_title'] = 'Children';
+$_lang['resourcehider.publish'] = 'Publish';
+$_lang['resourcehider.unpublish'] = 'Unpublish';
 
 // System/context settings
 $_lang['area_crc'] = 'Resource Hider Custom Resource Type';

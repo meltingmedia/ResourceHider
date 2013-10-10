@@ -8,6 +8,7 @@
 $_lang['resourcehider'] = 'Resource Hider';
 $_lang['resourcehider.all'] = 'Tous les contextes';
 $_lang['resourcehider.button'] = 'Visibilité';
+$_lang['resourcehider.back_btn'] = 'Retour au conteneur';
 $_lang['resourcehider.cmp_intro'] = '<h3>Votre ressource est perdue ?</h3>Trouvez ici les ressources marquées comme « à masquer de l\'arborescence ».';
 $_lang['resourcehider.error_msg_default'] = 'Quelquechose ne s\'est pas déroulé comme prévu, désolé';
 $_lang['resourcehider.error_msg_noaction'] = 'Aucune action (ou action inconnue) demandée';
@@ -26,10 +27,15 @@ $_lang['resourcehider.show_in_tree'] = 'Afficher';
 $_lang['resourcehider.success_msg'] = 'Il semblerait que tout se soit bien passé';
 $_lang['resourcehider.success_msg_title'] = 'Succès';
 // CRC related
-$_lang['resourcehider.grid_desc'] = 'Gérez les enfants de cette ressource ici.';
-$_lang['resourcehider.grid_title'] = 'Enfants';
 $_lang['resourcehider.container'] = 'Conteneur d\'enfants cachés';
 $_lang['resourcehider.container_create_here'] = 'Créer un conteneur d\'enfants cachés';
+$_lang['resourcehider.create'] = 'Créer';
+$_lang['resourcehider.delete'] = 'Supprimer';
+$_lang['resourcehider.edit'] = 'Éditer';
+$_lang['resourcehider.grid_desc'] = 'Gérez les enfants de cette ressource ici.';
+$_lang['resourcehider.grid_title'] = 'Enfants';
+$_lang['resourcehider.publish'] = 'Publier';
+$_lang['resourcehider.unpublish'] = 'Dépublier';
 
 // System/context settings
 $_lang['area_crc'] = 'Resource Hider Custom Resource Type';
