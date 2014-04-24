@@ -54,4 +54,12 @@ class HiddenChildren extends modResource
 
         return parent::save($cacheFlag);
     }
+
+    public function prepareTreeNode(array $node = array())
+    {
+        $cls = str_replace('tree-folder ', '', $node['cls']) . ' icon icon-plus-square-o';
+        $node['iconCls'] = $cls;
+
+        return $node;
+    }
 }
