@@ -4,7 +4,7 @@ class HiddenChildren extends modResource
 {
     public $showInContextMenu = true;
 
-    function __construct(xPDO &$xpdo)
+    public function __construct(xPDO &$xpdo)
     {
         parent::__construct($xpdo);
         $this->fromArray(array(

@@ -13,7 +13,7 @@ class ResourceHider
      * @param modX $modx A reference to the modX object
      * @param array $config An array of configuration options
      */
-    function __construct(modX &$modx, array $config = array())
+    public function __construct(modX &$modx, array $config = array())
     {
         $this->modx =& $modx;
         $this->prefix = $prefix = strtolower(get_class($this));
@@ -61,18 +61,10 @@ class ResourceHider
             'content_action' => $this->getOption('resourcehider.crc_content_action', null, 'none'),
             'insert_idx' => $this->getOption('resourcehider.crc_insert_idx', null, 'last'),
             'set_active_tab' => $this->getOption('resourcehider.crc_set_active_tab', null, false),
-
-            // Debug stuff
-            'debug' => $this->modx->getOption("{$prefix}.debug", null, false),
-            'debug_user' => null,
-            'debug_user_id' => null,
         ), $config);
 
         $this->modx->lexicon->load($this->prefix . ':default');
 
-        if ($this->modx->getOption('debug', $this->config)) {
-            $this->initDebug();
-        }
         if ($this->config['use_autoloader']) {
             $this->autoLoad();
         }
@@ -92,7 +84,7 @@ class ResourceHider
     {
         // System wide setting
         $value = $this->modx->getOption($key, $options, $default);
-        if ($this->modx->controller->resource instanceof modResource) {
+        if ($this->modx->controller && property_exists($this->modx->controller, 'resource') && $this->modx->controller->resource instanceof modResource) {
             // Context override
             $contextKey = $this->modx->controller->resource->context_key;
             $ctx = $this->modx->getContext($contextKey);
@@ -102,19 +94,6 @@ class ResourceHider
         }
 
         return $value;
-    }
-
-    /**
-     * Initialize the debug properties, to get more verbose errors
-     *
-     * @return void
-     */
-    private function initDebug()
-    {
-        error_reporting(E_ALL);
-        ini_set('display_errors', true);
-        //$this->modx->setLogTarget('FILE');
-        $this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
     }
 
     /**
