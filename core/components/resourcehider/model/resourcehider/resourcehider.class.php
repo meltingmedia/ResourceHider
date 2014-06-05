@@ -84,7 +84,7 @@ class ResourceHider
     {
         // System wide setting
         $value = $this->modx->getOption($key, $options, $default);
-        if ($this->modx->controller && property_exists($this->modx->controller, 'resource') && $this->modx->controller->resource instanceof modResource) {
+        if ($this->isValidController()) {
             // Context override
             $contextKey = $this->modx->controller->resource->context_key;
             $ctx = $this->modx->getContext($contextKey);
@@ -94,6 +94,18 @@ class ResourceHider
         }
 
         return $value;
+    }
+
+    /**
+     * Check whether or not we are using a controller with a reference to a modResource
+     * 
+     * @return bool
+     */
+    public function isValidController()
+    {
+        return $this->modx->controller &&
+            property_exists($this->modx->controller, 'resource') &&
+            $this->modx->controller->resource instanceof modResource;
     }
 
     /**
