@@ -31,9 +31,19 @@ class HiddenChildren extends modResource
 
     public static function getControllerPath(xPDO &$modx)
     {
-        $default = $modx->getOption('core_path') . 'components/resourcehider/';
+        $base = $modx->getOption(
+            'resourcehider.core_path',
+            null,
+            $modx->getOption('core_path') . 'components/resourcehider/'
+        );
+        $theme = $modx->getOption('manager_theme', null, 'default');
 
-        return $modx->getOption('resourcehider.core_path', null, $default) . 'controllers/crc/';
+        $path = $base . "controllers/{$theme}/crc/";
+        if (!file_exists($path) && $theme !== 'default') {
+            $path = $base . "controllers/default/crc/";
+        }
+
+        return $path;
     }
 
 //    public function prepareTreeNode(array $node = array())

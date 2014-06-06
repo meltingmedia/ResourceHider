@@ -1,0 +1,60 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "624deb6c5281d4eb84307ce46bccf84d",
+    "packages": [
+        {
+            "name": "meltingmedia/migration",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@git.melting-media.com:composer/migration.git",
+                "reference": "fb47fd7b8144eaa14e100464a853c3dadfe8684d"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "meltingmedia\\migration": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Romain Tripault",
+                    "email": "romain@melting-media.com",
+                    "homepage": "http://melting-media.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Helper to migrate your MODX components/extras",
+            "keywords": [
+                "helper",
+                "modx"
+            ],
+            "time": "2013-08-18 14:24:09"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "meltingmedia/migration": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
