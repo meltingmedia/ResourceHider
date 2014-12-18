@@ -6,6 +6,15 @@ Ext.ns('ResourceHider');
  * @param {Object} record The current resource data
  */
 ResourceHider.load = function(record) {
+    //Ext.ComponentMgr.onAvailable('modx-action-buttons', function(modAB) {
+    //    console.log('modAB ready!');
+    //    modAB.on('beforerender', function() {
+    //        modAB.insert(0, {
+    //            xtype: 'resourcehider-btn'
+    //            ,record: record
+    //        }, '-');
+    //    });
+    //});
     var modAB = Ext.getCmp('modx-action-buttons');
     if (modAB) {
         modAB.insert(0, {

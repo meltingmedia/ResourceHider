@@ -47,14 +47,18 @@ if ($parent && $parent->get('class_key') === 'HiddenChildren') {
     $load = 'ResourceHider.load('. $modx->toJSON($objectArray) .');';
 }
 
+$modx->controller->addLexiconTopic('resourcehider');
 // Seems like we are good to display the button
 $modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
-$modx->regClientStartupScript('<script type="text/javascript">
+$modx->regClientStartupScript(
+<<<HTML
+<script>
+    ResourceHider.config = {$modx->toJSON($rh->config)};
     Ext.onReady(function() {
-        ResourceHider.config = '. $modx->toJSON($rh->config) .';
-        Ext.applyIf(MODx.lang, '. $modx->toJSON($modx->lexicon->loadCache('resourcehider')) .');
-        '. $load .'
+        {$load}
     });
-</script>');
+</script>
+HTML
+);
 
 return;
