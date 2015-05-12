@@ -17,7 +17,7 @@ ResourceHider.load = function(record) {
     //});
     var modAB = Ext.getCmp('modx-action-buttons');
     if (modAB) {
-        modAB.insert(0, {
+        modAB.insert(modAB.items.length, {
             xtype: 'resourcehider-btn'
             ,record: record
         }, '-');
