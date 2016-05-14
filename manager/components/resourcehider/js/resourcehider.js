@@ -55,6 +55,7 @@ ResourceHider.Menu = function(config) {
         text: _('resourcehider.button')
         ,cls: 'x-btn-text bmenu'
         ,url: ResourceHider.config.connector_url
+        ,menuAlign: 'tr-br?'
         ,handler: function() {
             if (this.menu && !this.menu.isVisible() && !this.ignoreNextClick) {
                 this.showMenu();
@@ -128,6 +129,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
      * @var {String} action
      */
     ,_performAction: function(action) {
+        var me = this;
         MODx.Ajax.request({
             url: this.url
             ,params: {
@@ -138,10 +140,10 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
             ,listeners: {
                 success: {
                     fn: function(r) {
-                        this.record = r.object;
+                        me.record = r.object;
 
-                        this.buildMenu();
-                        this._refreshTree();
+                        me.buildMenu();
+                        me._refreshTree();
 
                         if (ResourceHider.config.show_status == 1) {
                             MODx.msg.status({
@@ -162,7 +164,7 @@ Ext.extend(ResourceHider.Menu, Ext.SplitButton, {
      */
     ,_refreshTree: function() {
         var tree = Ext.getCmp('modx-resource-tree');
-        if (tree) {
+        if (tree && tree.isVisible()) {
             tree.refresh();
         }
     }

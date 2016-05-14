@@ -2,8 +2,7 @@
 /**
  * Build script to create the transport package
  */
-$tstart = explode(' ', microtime());
-$tstart = $tstart[1] + $tstart[0];
+$tstart = microtime(true);
 set_time_limit(0);
 
 // Define package names
@@ -37,7 +36,9 @@ require_once $sources['build'] . '/includes/helper.php';
 $modx = new modX();
 $modx->initialize('mgr');
 // Used for nice formatting of log messages
-if (!XPDO_CLI_MODE) echo '<pre>';
+if (!XPDO_CLI_MODE) {
+    echo '<pre>';
+}
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 
@@ -138,9 +139,10 @@ $builder->setPackageAttributes(array(
 $modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
 $builder->pack();
 
-$tend = explode(' ', microtime());
-$tend = $tend[1] + $tend[0];
+$tend = microtime(true);
 $totalTime = sprintf("%2.4f s", ($tend - $tstart));
 $modx->log(modX::LOG_LEVEL_INFO, "\n\nPackage Built. \nExecution time: {$totalTime}\n");
-if (!XPDO_CLI_MODE) echo '</pre>';
-exit ();
+if (!XPDO_CLI_MODE) {
+    echo '</pre>';
+}
+exit();

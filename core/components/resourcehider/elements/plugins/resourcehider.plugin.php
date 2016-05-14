@@ -5,12 +5,9 @@
  * @var modX $modx
  * @var array $scriptProperties
  *
- * @event OnDocFormPrerender
+ * @event OnDocFormPrerender, OnBeforeManagerPageInit
  */
-// Make sure we are in the manager
-if ($modx->context->key != 'mgr') {
-    return;
-}
+
 $params = $modx->event->params;
 // Only when updating a resource
 if ($params['mode'] !== modSystemEvent::MODE_UPD) {
@@ -47,7 +44,7 @@ if ($parent && $parent->get('class_key') === 'HiddenChildren') {
     $load = 'ResourceHider.load('. $modx->toJSON($objectArray) .');';
 }
 
-$modx->controller->addLexiconTopic('resourcehider');
+$modx->controller->addLexiconTopic('resourcehider:default');
 // Seems like we are good to display the button
 $modx->regClientStartupScript($rh->config['mgr_js_url'] . 'resourcehider.js');
 $modx->regClientStartupScript(

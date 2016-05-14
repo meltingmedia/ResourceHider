@@ -2,7 +2,7 @@ Ext.ns('ResourceHider');
 
 /**
  * @class ResourceHider.CMP
- * @extends MODx.Panel
+ * @extends Ext.Container
  * @param {Object} config
  * @xtype resourcehider-cmp
  */
@@ -13,17 +13,27 @@ ResourceHider.CMP = function(config) {
         border: false
         ,baseCls: 'modx-formpanel'
         ,cls: 'container'
+        ,defaults: {
+            layout: 'anchor'
+        }
         ,items: [{
             html: '<h2>' + _('resourcehider') + '</h2>'
             ,border: false
             ,cls: 'modx-page-header'
+            ,xtype: 'box'
+            ,autoEl: {
+                tag: 'h2'
+            }
         },{
-            xtype: 'panel'
-            ,layout: 'anchor'
+            xtype: 'container'
+            ,cls: 'x-panel-body shadowbox'
+            ,defaults: {
+                autoHeight: true
+            }
             ,items: [{
                 html: _('resourcehider.cmp_intro')
-                ,border: false
-                ,bodyCssClass: 'panel-desc'
+                ,xtype: 'box'
+                ,cls: 'panel-desc'
             },{
                  xtype: 'resourcehider-grid'
                  ,cls: 'main-wrapper'
@@ -33,7 +43,7 @@ ResourceHider.CMP = function(config) {
     });
     ResourceHider.CMP.superclass.constructor.call(this, config);
 };
-Ext.extend(ResourceHider.CMP, MODx.Panel);
+Ext.extend(ResourceHider.CMP, Ext.Container);
 Ext.reg('resourcehider-cmp', ResourceHider.CMP);
 
 /**
@@ -169,6 +179,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
      * Restores the show_in_tree status
      */
     ,_performAction: function(id, action) {
+        var me = this;
         MODx.Ajax.request({
             url: this.url
             ,params: {
@@ -179,8 +190,8 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
             ,listeners: {
                 success: {
                     fn: function(r) {
-                        this.refresh();
-                        this._refreshTree();
+                        me.refresh();
+                        me._refreshTree();
                     }
                     ,scope: this
                 }
@@ -193,7 +204,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
      */
     ,_refreshTree: function() {
         var tree = Ext.getCmp('modx-resource-tree');
-        if (tree) {
+        if (tree && tree.isVisible()) {
             tree.refresh();
         }
     }
