@@ -5,7 +5,7 @@
  * @var modX $modx
  * @var array $scriptProperties
  *
- * @event OnDocFormPrerender, OnBeforeManagerPageInit
+ * @event OnDocFormPrerender
  */
 
 $params = $modx->event->params;
