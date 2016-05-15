@@ -18,12 +18,26 @@ ResourceHider.load = function(id) {
     // The content to be inserted in a tab
     var tabContent = {
         title: _('resourcehider.grid_title')
-        ,bodyCssClass: 'main-wrapper'
+        //,bodyCssClass: 'main-wrapper'
         ,anchor: '100%'
         ,layout: 'anchor'
+        ,defaults: {
+            border: false
+            ,layout: 'anchor'
+            ,anchor: '100%'
+            ,autoHeight: true
+        }
         ,items: [{
-            xtype: 'resourcehider-grid'
-            ,resource: id
+            html: _('resourcehider.grid_desc')
+            ,xtype: 'box'
+            ,cls: 'panel-desc'
+        },{
+            xtype: 'container'
+            ,cls: 'main-wrapper'
+            ,items: [{
+                xtype: 'resourcehider-grid'
+                ,resource: id
+            }]
         }]
     };
     // The content to be inserted in the main panel
@@ -75,7 +89,7 @@ ResourceHider.load = function(id) {
  * The panel used in the CRC if not "embed" within the tab panel
  *
  * @class ResourceHider.CRC
- * @extends MODx.Panel
+ * @extends Ext.Panel
  * @param {object} config
  * @xtype resourcehider-crc
  */
@@ -84,7 +98,7 @@ ResourceHider.CRC = function(config) {
 
     Ext.apply(config, {
         title: _('resourcehider.grid_title')
-        ,style: 'margin-top: 10px; margin-bottom: 10px'
+        ,cls: 'container shadowbox resourcehider-crc'
         ,autoHeight: true
         ,collapsible: true
         ,animCollapse: false
@@ -93,12 +107,15 @@ ResourceHider.CRC = function(config) {
             border: false
             ,layout: 'anchor'
             ,anchor: '100%'
+            ,autoHeight: true
         }
         ,items: [{
             html: _('resourcehider.grid_desc')
-            ,bodyCssClass: 'panel-desc'
+            ,xtype: 'box'
+            ,cls: 'panel-desc'
         },{
-            bodyCssClass: 'main-wrapper'
+            xtype: 'container'
+            ,cls: 'main-wrapper'
             ,items: [{
                 xtype: 'resourcehider-grid'
                 ,resource: config.resource
@@ -107,7 +124,7 @@ ResourceHider.CRC = function(config) {
     });
     ResourceHider.CRC.superclass.constructor.call(this, config);
 };
-Ext.extend(ResourceHider.CRC, MODx.Panel);
+Ext.extend(ResourceHider.CRC, Ext.Panel);
 Ext.reg('resourcehider-crc', ResourceHider.CRC);
 
 /**
@@ -219,7 +236,7 @@ Ext.extend(ResourceHider.Grid, MODx.grid.Grid, {
     }
 
     ,create: function() {
-        location.href = '?a=' + this.getMODxAction('resource/update') + '&parent=' + this.config.resource;
+        location.href = '?a=' + this.getMODxAction('resource/create') + '&parent=' + this.config.resource;
     }
 
     ,togglePublish: function() {

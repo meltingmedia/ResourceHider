@@ -24,6 +24,7 @@ class HiddenChildrenUpdateManagerController extends ResourceUpdateManagerControl
     public function loadCustomCssJs()
     {
         $this->addJavascript($this->resourcehider->config['mgr_js_url'] . 'resourcehidercrc.js');
+        $this->addCss($this->resourcehider->config['mgr_css_url'] . 'resourcehider-crc.css');
 
         // Load default form
         parent::loadCustomCssJs();

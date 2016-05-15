@@ -57,7 +57,8 @@ class ResourceHider
             'show_status' => $this->modx->getOption('resourcehider.show_status', null, false),
 
             // CRC config
-            'target' => $this->getOption('resourcehider.crc_target', null, 'panel'),
+            //'target' => $this->getOption('resourcehider.crc_target', null, 'panel'),
+            'target' => $this->getOption('resourcehider.crc_target', null, 'tabs'),
             'content_action' => $this->getOption('resourcehider.crc_content_action', null, 'none'),
             'insert_idx' => $this->getOption('resourcehider.crc_insert_idx', null, 'last'),
             'set_active_tab' => $this->getOption('resourcehider.crc_set_active_tab', null, false),
