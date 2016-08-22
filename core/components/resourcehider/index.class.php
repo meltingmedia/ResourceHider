@@ -73,6 +73,11 @@ HTML
     {
         return $this->modx->lexicon('resourcehider');
     }
+
+    public function checkFormCustomizationRules(&$obj = null, $forParent = false)
+    {
+        return array();
+    }
 }
 
 

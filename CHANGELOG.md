@@ -3,6 +3,7 @@
 
 ## [unreleased]
 
+* Revolution 2.3+ support
 * Added ability to hide status messages
 * Added a "back to container" button in modAB when the parent is a CRC
 * Added lexicon strings for CRC grid buttons (so it could be overridden)
