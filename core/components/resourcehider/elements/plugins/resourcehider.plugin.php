@@ -15,6 +15,9 @@ if ($params['mode'] !== modSystemEvent::MODE_UPD) {
 }
 /** @var modResource $resource */
 $resource =& $params['resource'];
+if (!$resource instanceof modResource) {
+    return;
+}
 // Get the service
 $path = $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/'). 'model/resourcehider/';
 $rh = $modx->getService('resourcehider', 'ResourceHider', $path);
