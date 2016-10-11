@@ -1,10 +1,15 @@
 <?php
+
+//require_once __DIR__ . '/../../vendor/autoload.php';
+
 /**
  * Resource Hider service class
  */
 class ResourceHider
 {
-    /** @var modX $modx */
+    /**
+     * @var modX $modx
+     */
     public $modx;
 
     /**
@@ -41,7 +46,6 @@ class ResourceHider
 
             'migrations_path' => $basePath . 'migrations/',
 
-            'use_autoloader' => true,
             'vendor_path' => $basePath . 'vendor/',
 
             'js_url' => $assetsUrl . 'js/',
@@ -66,12 +70,87 @@ class ResourceHider
 
         $this->modx->lexicon->load($this->prefix . ':default');
 
-        if ($this->config['use_autoloader']) {
-            $this->autoLoad();
-        }
         if ($this->config['add_package']) {
             $this->modx->addPackage($this->prefix, $this->config['model_path']);
         }
+    }
+
+    /**
+     * @see ResourceManagerController::firePreRenderEvents()
+     */
+    public function OnDocFormPrerender()
+    {
+        $params = $this->modx->event->params;
+        // Allow the ability not to display the modAB option
+        if (!$this->shouldShow() || $params['mode'] !== modSystemEvent::MODE_UPD) {
+            return;
+        }
+
+        /** @var modResource $resource */
+        $resource = $params['resource'];
+//        if (!$resource instanceof modResource) {
+//            return;
+//        }
+
+        // Make sure the resource is in a context where Resource Hider is allowed
+        $allowedContexts = $this->config['allowed_contexts'];
+        if (!empty($allowedContexts)) {
+            if (!in_array($resource->get('context_key'), $allowedContexts)) {
+                return;
+            }
+        }
+
+        // Make sure the current resource uses an allowed class key
+        if (!in_array($resource->get('class_key'), $this->config['allowed_classes'])) {
+            return;
+        }
+
+        // Define the appropriate action according to the parent being a container with hidden children or not
+        $parent = $resource->getOne('Parent');
+        if ($parent && $parent->get('class_key') === 'HiddenChildren') {
+            // Back to container button
+            $load = 'ResourceHider.loadBack();';
+        } else {
+            // Normal split button
+            $objectArray = $resource->toArray();
+            $load = 'ResourceHider.load('. $this->modx->toJSON($objectArray) .');';
+        }
+
+        $this->modx->controller->addLexiconTopic('resourcehider:default');
+        // Seems like we are good to display the button i modAB
+        $this->modx->controller->addJavascript($this->config['mgr_js_url'] . 'resourcehider.js');
+        $this->modx->controller->addHtml(<<<HTML
+<script>
+    ResourceHider.config = {$this->modx->toJSON($this->config)};
+    Ext.onReady(function() {
+        {$load}
+    });
+</script>
+HTML
+        );
+    }
+
+    /**
+     * @TODO
+     *
+     * @see modManagerController::render()
+     */
+    public function OnBeforeManagerPageInit()
+    {
+        // Load tree override if any
+        if (!$this->shouldShow()) {
+            return;
+        }
+    }
+
+    /**
+     * Check whether or not to display ResourceHider extra data for the current user
+     *
+     * @return bool
+     */
+    public function shouldShow()
+    {
+        return (bool) ($this->modx->user->sudo || $this->modx->getOption('resourcehider.show', null, false));
     }
 
     /**
@@ -99,7 +178,7 @@ class ResourceHider
 
     /**
      * Check whether or not we are using a controller with a reference to a modResource
-     * 
+     *
      * @return bool
      */
     public function isValidController()
@@ -107,20 +186,5 @@ class ResourceHider
         return $this->modx->controller &&
             property_exists($this->modx->controller, 'resource') &&
             $this->modx->controller->resource instanceof modResource;
-    }
-
-    /**
-     * Initialize the auto-loader if found
-     *
-     * @return void
-     */
-    private function autoLoad()
-    {
-        $loader = $this->config['vendor_path'] . 'autoload.php';
-        if (file_exists($loader)) {
-            require_once $loader;
-        } else {
-            $this->modx->log(modX::LOG_LEVEL_ERROR, 'Autoloader file not found');
-        }
     }
 }

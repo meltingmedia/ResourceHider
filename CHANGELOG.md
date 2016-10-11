@@ -3,6 +3,7 @@
 
 ## [unreleased]
 
+* Added ability to display Resource Hider based on `resourcehider.show` setting (global/group/user)
 * Revolution 2.3+ support
 * Added ability to hide status messages
 * Added a "back to container" button in modAB when the parent is a CRC
