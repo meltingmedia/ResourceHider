@@ -20,11 +20,14 @@ $sources = array(
     'build' => $root . '_build/',
     'data' => $root . '_build/data/',
     'resolvers' => $root . '_build/resolvers/',
+    'validators' => $root . '_build/validators/',
     'build_target' => $root . '_build/_packages/',
+
     'docs' => $root.'core/components/'. PKG_NAME_LOWER .'/docs/',
     'chunks' => $root . 'core/components/'. PKG_NAME_LOWER .'/chunks/',
     'lexicon' => $root . 'core/components/'. PKG_NAME_LOWER .'/lexicon/',
     'elements' => $root.'core/components/'. PKG_NAME_LOWER .'/elements/',
+
     'source_assets' => $root.'assets/components/'. PKG_NAME_LOWER,
     'manager_assets' => $root.'manager/components/'. PKG_NAME_LOWER,
     'source_core' => $root.'core/components/'. PKG_NAME_LOWER,
@@ -111,8 +114,8 @@ $vehicle->resolve('file', array(
 $builder->putVehicle($vehicle);
 
 // Load menu
-$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
-$menu = include $sources['data'] . 'transport.menu.php';
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu for 2.2-...');
+$menu = include $sources['data'] . 'transport.menu-2.2.php';
 if (empty($menu)) {
     $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
 }
@@ -129,7 +132,31 @@ $vehicle = $builder->createVehicle($menu, array (
         ),
     ),
 ));
+$vehicle->validate('php', array(
+    'source' => $sources['validators'] . 'modx-2.2.php',
+    'silent_fail' => true,
+));
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'master.php',
+));
+$builder->putVehicle($vehicle);
+unset($vehicle, $menu);
+
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu for 2.3+...');
+$menu = include $sources['data'] . 'transport.menu-2.3.php';
+if (empty($menu)) {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
+}
+$vehicle = $builder->createVehicle($menu, array (
+    xPDOTransport::PRESERVE_KEYS => true,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::UNIQUE_KEY => 'text',
+));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding in PHP resolvers...');
+$vehicle->validate('php', array(
+    'source' => $sources['validators'] . 'modx-2.3.php',
+    'silent_fail' => true,
+));
 $vehicle->resolve('php', array(
     'source' => $sources['resolvers'] . 'master.php',
 ));

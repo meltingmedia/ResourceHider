@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [unreleased]
+## [0.3.0-dev] - 2016/10/12
 
 * Added ability to display Resource Hider based on `resourcehider.show` setting (global/group/user)
 * Revolution 2.3+ support
@@ -51,7 +51,8 @@
 * Initial release
 
 
-[unreleased]: https://github.com/meltingmedia/ResourceHider/compare/v0.2.1-dev...HEAD
+[unreleased]: https://github.com/meltingmedia/ResourceHider/compare/v0.3.0-dev...HEAD
+[0.3.0-dev]: https://github.com/meltingmedia/ResourceHider/compare/v0.2.1-dev...v0.3.0-dev
 [0.2.1-dev]: https://github.com/meltingmedia/ResourceHider/compare/v0.2.0-dev...v0.2.1-dev
 [0.2.0-dev]: https://github.com/meltingmedia/ResourceHider/compare/v0.1.2-dev...v0.2.0-dev
 [0.1.2-dev]: https://github.com/meltingmedia/ResourceHider/compare/v0.1.1-dev...v0.1.2-dev
