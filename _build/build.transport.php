@@ -5,19 +5,22 @@
 $tstart = microtime(true);
 set_time_limit(0);
 
+$root = dirname(__DIR__) . '/';
+
 // Define package names
 define('PKG_NAME', 'ResourceHider');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
-define('PKG_VERSION', '0.2.1');
-define('PKG_RELEASE', 'dev');
+$version = explode('-', trim(file_get_contents($root . 'VERSION')));
+define('PKG_VERSION', $version[0]);
+define('PKG_RELEASE', $version[1]);
 
 // Define build paths
-$root = dirname(dirname(__FILE__)) . '/';
 $sources = array(
     'root' => $root,
     'build' => $root . '_build/',
     'data' => $root . '_build/data/',
     'resolvers' => $root . '_build/resolvers/',
+    'build_target' => $root . '_build/_packages/',
     'docs' => $root.'core/components/'. PKG_NAME_LOWER .'/docs/',
     'chunks' => $root . 'core/components/'. PKG_NAME_LOWER .'/chunks/',
     'lexicon' => $root . 'core/components/'. PKG_NAME_LOWER .'/lexicon/',
@@ -44,6 +47,15 @@ $modx->setLogTarget('ECHO');
 
 $modx->loadClass('transport.modPackageBuilder', '', false, true);
 $builder = new modPackageBuilder($modx);
+if (isset($sources['build_target']) && !empty($sources['build_target'])) {
+    $exists = true;
+    if (!file_exists($sources['build_target'])) {
+        $exists = mkdir($sources['build_target'], 0777, true);
+    }
+    if ($exists) {
+        $builder->directory = $sources['build_target'];
+    }
+}
 $builder->createPackage(PKG_NAME_LOWER, PKG_VERSION, PKG_RELEASE);
 $builder->registerNamespace(PKG_NAME_LOWER, false, true, '{core_path}components/'. PKG_NAME_LOWER .'/');
 
@@ -127,9 +139,9 @@ unset($vehicle, $menu);
 // Now pack in the license file, readme and setup options
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding package attributes and setup options...');
 $builder->setPackageAttributes(array(
-    'license' => file_get_contents($sources['docs'] . 'license.txt'),
-    'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
-    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
+    'license' => file_get_contents($sources['root'] . 'LICENSE'),
+    'readme' => file_get_contents($sources['root'] . 'README.md'),
+    'changelog' => file_get_contents($sources['root'] . 'CHANGELOG.md'),
     /*'setup-options' => array(
         'source' => $sources['build'] . 'setup.options.php',
     ),*/

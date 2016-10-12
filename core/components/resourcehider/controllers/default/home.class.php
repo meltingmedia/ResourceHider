@@ -21,8 +21,7 @@ class ResourceHiderHomeManagerController extends ResourceHiderManagerController
 {
     public function loadCustomCssJs()
     {
-        $this->addHtml(
-<<<HTML
+        $this->addHtml(<<<HTML
 <script>
     Ext.onReady(function() {
         MODx.add('resourcehider-cmp');

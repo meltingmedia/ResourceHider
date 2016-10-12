@@ -2,13 +2,35 @@
 /**
  * Master resolver to handle migrations & upgrades
  *
- * @var xPDOObject|null $object
+ * @see xPDOVehicle::resolve
+ *
+ * @var xPDOVehicle $this
+ * @var xPDOTransport $transport
+ * @var xPDOObject|mixed $object
+ * @var array $options
+ *
+ * @var array $fileMeta
+ * @var string $fileName
+ * @var string $fileSource
+ *
+ * @var array $r
+ * @var string $type (file/php), obviously php :)
+ * @var string $body (json)
+ * @var integer $preExistingMode
  */
 if ($object->xpdo) {
     /** @var $modx modX */
     $modx =& $object->xpdo;
 
-    $rootPath = $modx->getOption('resourcehider.core_path', null, $modx->getOption('core_path') . 'components/resourcehider/');
+    $rootPath = $modx->getOption(
+        'resourcehider.core_path',
+        null,
+        $modx->getOption('core_path') . 'components/resourcehider/'
+    );
+    $loader = "{$rootPath}vendor/autoload.php";
+    if (file_exists($loader)) {
+        require_once $loader;
+    }
     $modelPath = $rootPath . 'model/';
     // Make sure the service class is available
     if (file_exists($modelPath . 'resourcehider/resourcehider.class.php')) {
@@ -28,7 +50,7 @@ if ($object->xpdo) {
     // Get signature
     $tmpVersion = $migration->getVersion($options);
 
-    if ($options[xPDOTransport::PACKAGE_ACTION] == xPDOTransport::ACTION_INSTALL or
+    if ($options[xPDOTransport::PACKAGE_ACTION] == xPDOTransport::ACTION_INSTALL ||
         $options[xPDOTransport::PACKAGE_ACTION] == xPDOTransport::ACTION_UPGRADE
     ) {
         // Common stuff for install/upgrade

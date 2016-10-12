@@ -37,5 +37,5 @@ $modx->request->handleRequest(array(
         $modx->{$service}->config,
         $path . 'processors/'
     ),
-    'location' => $ctx == 'mgr' ? 'mgr' : '',
+    'location' => $ctx === 'mgr' ? 'mgr' : '',
 ));

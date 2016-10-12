@@ -1,9 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "624deb6c5281d4eb84307ce46bccf84d",
+    "hash": "e5f344a49c76f453598bdbd9e10c028f",
+    "content-hash": "fd75fa73977e1ee46bf4ecc19abef369",
     "packages": [
         {
             "name": "meltingmedia/migration",
@@ -41,20 +43,14 @@
             "time": "2013-08-18 14:24:09"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "meltingmedia/migration": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }
